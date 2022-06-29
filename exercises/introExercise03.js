@@ -12,7 +12,7 @@ let scene, renderer, camera, material, light, orbit; // Initial variables
 scene = new THREE.Scene(); // Create main scene
 renderer = initRenderer(); // Init a basic renderer
 camera = initCamera(new THREE.Vector3(0, 15, 30)); // Init camera in this position
-material = setDefaultMaterial(); // Create a basic material
+material = setDefaultMaterial("orange"); // Creates basic materials
 light = initDefaultBasicLight(scene); // Create a basic light to illuminate the scene
 orbit = new OrbitControls(camera, renderer.domElement); // Enable mouse rotation, pan, zoom etc.
 
@@ -27,32 +27,26 @@ scene.add(axesHelper);
 let plane = createGroundPlaneXZ(20, 20)
 scene.add(plane);
 
-// Create a cube (A)
-let dimCubeA = 4;
-let cubeAGeometry = new THREE.BoxGeometry(dimCubeA, dimCubeA, dimCubeA);
-let cubeA = new THREE.Mesh(cubeAGeometry, material);
-// Position the cube (A)
-cubeA.position.set(0.0, dimCubeA/2, 0); // RGB
-// Add the cube (A) to the scene
-scene.add(cubeA);
-
-// Create a cube (B)
-let dimCubeB = 1;
-let cubeBGeometry = new THREE.BoxGeometry(dimCubeB, dimCubeB, dimCubeB);
-let cubeB = new THREE.Mesh(cubeBGeometry, material);
-// Position the cube (B)
-cubeB.position.set(8*dimCubeB, dimCubeB/2, 0.0);  // RGB
-// Add the cube (B) to the scene
-scene.add(cubeB);
-
-// Create a cube (C)
-let dimCubeC = 2;
-let cubeCGeometry = new THREE.BoxGeometry(dimCubeC, dimCubeC, dimCubeC);
-let cubeC = new THREE.Mesh(cubeCGeometry, material);
-// Position the cube (C)
-cubeC.position.set(-2*dimCubeC, dimCubeC/2, 2*dimCubeC);  // RGB
-// Add the cube (C) to the scene
-scene.add(cubeC);
+// Create cubes
+let dimCube, step, x, y, dx, dy, r, b;
+dimCube = 4;
+step = 2;
+x = y = -step*dimCube; // Initial position
+r = 3;
+b = 3;
+for (var i = 0; i < r; i++) {
+  for (var j = 0; j < b; j++) {
+    let cubeGeometry = new THREE.BoxGeometry(dimCube, dimCube, dimCube);
+    let cube = new THREE.Mesh(cubeGeometry, material);
+  
+    // Cube position
+    dx = i*step*dimCube;
+    dy = j*step*dimCube;
+    cube.position.set(x+dx, dimCube/2, y+dy); // RGB
+    // Add the cube to the scene
+    scene.add(cube);
+  }
+}
 
 // Use this to show information onscreen
 let controls = new InfoBox();
