@@ -1,5 +1,5 @@
-import * as THREE from  'three';
-import {OrbitControls} from '../build/jsm/controls/OrbitControls.js';
+import * as THREE from  "three";
+import {OrbitControls} from "../build/jsm/controls/OrbitControls.js";
 import {initRenderer,
         initCamera,
         initDefaultBasicLight,
@@ -17,7 +17,7 @@ light = initDefaultBasicLight(scene); // Create a basic light to illuminate the 
 orbit = new OrbitControls(camera, renderer.domElement); // Enable mouse rotation, pan, zoom etc.
 
 // Listen window size changes
-window.addEventListener('resize', function(){onWindowResize(camera, renderer)}, false);
+window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, false);
 
 // Show axes (parameter is size of each axis)
 let axesHelper = new THREE.AxesHelper(12);
@@ -41,7 +41,7 @@ let dimCubeB = 1;
 let cubeBGeometry = new THREE.BoxGeometry(dimCubeB, dimCubeB, dimCubeB);
 let cubeB = new THREE.Mesh(cubeBGeometry, material);
 // Position the cube (B)
-cubeB.position.set(8*dimCubeB, dimCubeB/2, 0.0);  // RGB
+cubeB.position.set(8*dimCubeB, dimCubeB/2, 0.0); // RGB
 // Add the cube (B) to the scene
 scene.add(cubeB);
 
@@ -50,7 +50,7 @@ let dimCubeC = 2;
 let cubeCGeometry = new THREE.BoxGeometry(dimCubeC, dimCubeC, dimCubeC);
 let cubeC = new THREE.Mesh(cubeCGeometry, material);
 // Position the cube (C)
-cubeC.position.set(-2*dimCubeC, dimCubeC/2, 2*dimCubeC);  // RGB
+cubeC.position.set(-2*dimCubeC, dimCubeC/2, 2*dimCubeC); // RGB
 // Add the cube (C) to the scene
 scene.add(cubeC);
 

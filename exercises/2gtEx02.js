@@ -1,11 +1,12 @@
-import * as THREE from  'three';
-import {OrbitControls} from '../build/jsm/controls/OrbitControls.js';
+import * as THREE from  "three";
+import {OrbitControls} from "../build/jsm/controls/OrbitControls.js";
 import {initRenderer, 
         initCamera,
         initDefaultBasicLight,
         setDefaultMaterial,
         InfoBox,
         onWindowResize,
+        degreesToRadians,
         createGroundPlaneXZ} from "../libs/util/util.js";
 
 let scene, renderer, camera, material, light, orbit; // Initial variables
@@ -17,7 +18,7 @@ light = initDefaultBasicLight(scene); // Create a basic light to illuminate the 
 orbit = new OrbitControls(camera, renderer.domElement); // Enable mouse rotation, pan, zoom etc.
 
 // Listen window size changes
-window.addEventListener('resize', function(){onWindowResize(camera, renderer)}, false);
+window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, false);
 
 // Show axes (parameter is size of each axis)
 let axesHelper = new THREE.AxesHelper(12);
@@ -27,47 +28,39 @@ scene.add(axesHelper);
 let plane = createGroundPlaneXZ(20, 20)
 scene.add(plane);
 
-// Create the table
-let dimCube, g;
-dimCube = 1;
-g = 3;
-let cubeGeometry = new THREE.BoxGeometry(dimCube, dimCube, dimCube);
-let cube = new THREE.Mesh(cubeGeometry, material);
+// Creates the spheres
+let radius, widthSegments, heightSegments, yStepAngle, x, z, numSpheres;
+radius = 0.5;
+widthSegments = 100;
+heightSegments = 100;
 
-cube.position.set(0.0, g, 0.0); // Position the cube
-cube.scale.set(11, 0.3, 6); // Set scale to create a table
-scene.add(cube); // Add the table to the scene
+yStepAngle = degreesToRadians(30);
+x = 8;
+z = 0;
+numSpheres = 12;
 
-// Creates the supports
-let radiusTop, radiusBottom, height, radialSegments, x, z, stepR, stepB, r, b, dx, dz;
-radiusTop = 0.2;
-radiusBottom = 0.2;
-height = 3;
-radialSegments = 100;
+for (var i = 0; i < numSpheres; i++) {
+  var sphere = createSphere(radius, widthSegments, heightSegments, material);
 
-// Initial positions
-x = -(11/2)+2*radiusTop;
-z = -(6/2)+2*radiusTop;
+  // Add the cylinder to the scene
+  scene.add(sphere);
 
-stepR = -2*x;
-stepB = -2*z;
-r = 2;
-b = 2;
+  sphere.matrixAutoUpdate = false;
+  sphere.matrix.identity(); // Resetting matrice
 
-for (var i = 0; i < r; i++) {
-  for (var k = 0; k < b; k++) {
-    let cylinderGeometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments);
-    let cylinder = new THREE.Mesh(cylinderGeometry, material);
-  
-    // Cylinder position
-    dx = i*stepR*dimCube;
-    dz = k*stepB*dimCube;
-    cylinder.position.set(x, height/2, z); // RGB
-    cylinder.translateX(dx);
-    cylinder.translateZ(dz);
-    // Add the cylinder to the scene
-    scene.add(cylinder);
-  }
+  var mat4 = new THREE.Matrix4(); // Auxiliar matrix
+
+  // Translation and Rotation
+  sphere.matrix.multiply(mat4.makeRotationY(yStepAngle*i));
+  sphere.matrix.multiply(mat4.makeTranslation(x, radius, z));
+}
+
+function createSphere(radius, widthSegments, heightSegments, material)
+{
+  var sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+  var sphere = new THREE.Mesh(sphereGeometry, material);
+
+  return sphere;
 }
 
 // Use this to show information onscreen
@@ -81,6 +74,7 @@ let controls = new InfoBox();
   controls.show();
 
 render();
+
 function render()
 {
   requestAnimationFrame(render);

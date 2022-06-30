@@ -1,5 +1,5 @@
-import * as THREE from  'three';
-import {OrbitControls} from '../build/jsm/controls/OrbitControls.js';
+import * as THREE from  "three";
+import {OrbitControls} from "../build/jsm/controls/OrbitControls.js";
 import {initRenderer,
         initCamera,
         initDefaultBasicLight,
@@ -20,7 +20,7 @@ light = initDefaultBasicLight(scene); // Create a basic light to illuminate the 
 orbit = new OrbitControls(camera, renderer.domElement); // Enable mouse rotation, pan, zoom etc.
 
 // Listen window size changes
-window.addEventListener('resize', function(){onWindowResize(camera, renderer)}, false);
+window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, false);
 
 // Show axes (parameter is size of each axis)
 let axesHelper = new THREE.AxesHelper(12);
