@@ -6,7 +6,7 @@ import {initRenderer,
         setDefaultMaterial,
         InfoBox,
         onWindowResize,
-        createGroundPlaneXZ } from "../libs/util/util.js";
+        createGroundPlaneXZ} from "../libs/util/util.js";
 
 let scene, renderer, camera, materialCube, materialSphere, materialCylinder, light, orbit; // Initial variables
 scene = new THREE.Scene(); // Create main scene

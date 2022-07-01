@@ -58,7 +58,7 @@ var cylinder4 = new THREE.Mesh(cylinderGeometry4, cylinderMaterial4);
 cylinder2.add(cylinder4);
 
 // Listen window size changes
-window.addEventListener( "resize", function(){onWindowResize(camera, renderer)}, false );
+window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, false);
 
 buildInterface();
 render();
