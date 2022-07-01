@@ -1,7 +1,7 @@
-import * as THREE from  'three';
-import Stats from '../build/jsm/libs/stats.module.js';
-import GUI from '../libs/util/dat.gui.module.js';
-import {TrackballControls} from '../build/jsm/controls/TrackballControls.js';
+import * as THREE from  "three";
+import Stats from "../build/jsm/libs/stats.module.js";
+import GUI from "../libs/util/dat.gui.module.js";
+import {TrackballControls} from "../build/jsm/controls/TrackballControls.js";
 import {initRenderer, 
         initCamera, 
         onWindowResize, 
@@ -42,7 +42,7 @@ var c3 = createCylinder();
 s3.add(c3);
 
 // Listen window size changes
-window.addEventListener('resize', function(){onWindowResize(camera, renderer)}, false);
+window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, false);
 
 buildInterface();
 render();
@@ -50,7 +50,7 @@ render();
 function createSphere()
 {
   var sphereGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-  var sphereMaterial = new THREE.MeshPhongMaterial({color:'rgb(180,180,255)'});
+  var sphereMaterial = new THREE.MeshPhongMaterial({color:"rgb(180,180,255)"});
   var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
   return sphere;
@@ -59,7 +59,7 @@ function createSphere()
 function createCylinder()
 {
   var cylinderGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2.0, 25);
-  var cylinderMaterial = new THREE.MeshPhongMaterial({color:'rgb(100,255,100)'});
+  var cylinderMaterial = new THREE.MeshPhongMaterial({color:"rgb(100,255,100)"});
   var cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
 
   return cylinder;
@@ -123,13 +123,13 @@ function buildInterface()
 
   // GUI interface
   var gui = new GUI();
-  gui.add(controls, 'joint1', 0, 360)
+  gui.add(controls, "joint1", 0, 360)
     .onChange(function() {controls.rotate()})
     .name("First Joint");
-  gui.add(controls, 'joint2', 0, 360)
+  gui.add(controls, "joint2", 0, 360)
     .onChange(function() {controls.rotate()})
     .name("Second Joint");
-  gui.add(controls, 'joint3', 0, 360)
+  gui.add(controls, "joint3", 0, 360)
     .onChange(function() {controls.rotate()})
     .name("Third Joint");
 }
