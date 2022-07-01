@@ -59,7 +59,7 @@ var list = {
 				"AR - Fiducial Marker": "html/AR_BasicInfo",	
 			},
 		},
-		"Additional Examples":{
+		"Additional Examples": {
 			"Textures - Advanced":  {
 				"Environment mapping 1": "html/textureAdvancedCubeMapInfo",
 				"Environment mapping 2": "html/textureAdvancedEquirectangularMapInfo",				
