@@ -89,5 +89,24 @@ var list = {
 			},
 
 		},
+		"Exercises RVA (Part 1)": {
+			"1 - Basic":  {
+				"Ex01": "html/01basicEx01Info",
+				"Ex02": "html/keyboardExampleInfo",
+				"Ex03": "html/geometricTransformation1Info",
+			},
+			"2 - Geometric Transformations":  {
+				"Ex01": "html/animationInfo",
+				"Ex02": "html/animationExternalObjectsInfo",
+				"Ex03": "html/animationExternalObjectsInfo",
+			},
+			"3 - Projections & Cameras":  {
+				"Ex01": "html/lightingTypesInfo",
+			},
+			"4 - Animations":  {
+				"Ex01":"html/shadowMapTypesInfo",
+				"Ex02":"html/shadowMapViewerInfo",
+			},
+		},
 	},
 };
