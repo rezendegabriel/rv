@@ -1,7 +1,7 @@
 var list = {
 	"en": {
 		"Projects": {
-			"Basics":  {
+			"Basics": {
 				"Basic Scene": "html/basicSceneInfo",
 				"Using the keyboard": "html/keyboardExampleInfo",
 				"Geometric Transformations 1": "html/geometricTransformation1Info",
@@ -9,21 +9,21 @@ var list = {
 				"Projection": "html/projectionInfo",
 				"Virtual Camera": "html/virtualCameraInfo",				
 			},
-			"Animations":  {
+			"Animations": {
 				"Basic": "html/animationInfo",
 				"Using External Objects": "html/animationExternalObjectsInfo",
 			},
-			"Lighting":  {
+			"Lighting": {
 				"Types of lights": "html/lightingTypesInfo",
 				"Types of materials": "html/lightingMaterialsInfo",
 				"Spotlight in Details": "html/lightingSpotlightDetailsInfo",				
 			},
-			"Shadows":  {
+			"Shadows": {
 				"Shadow Map Types":"html/shadowMapTypesInfo",			
 				"Shadow Map Viewer":"html/shadowMapViewerInfo",
 				"Shadow Update":"html/shadowUpdateInfo",				
 			},			
-			"Geometries":  {
+			"Geometries": {
 				"Manual Creation": "html/geometriesManualInfo",				
 				"Basic": "html/geometriesBasicInfo",
 				"Lathe": "html/geometriesLatheInfo",
@@ -32,19 +32,19 @@ var list = {
             "CSG": "html/geometryCSGInfo",
 				"Loading External Files": "html/geometriesExternalObjectsInfo",
 			},			
-			"Textures":  {
+			"Textures": {
 				"Basic": "html/textureBasicInfo",
 				"Main Options": "html/textureOptionsInfo",
 				"Textured External Objects": "html/textureExternalObjectsInfo",
 				"UV Mapping":"html/textureUVMappingInfo",
 			},
-			"Raytracing":  {
+			"Raytracing": {
 				"Example 1": "html/raytracingExample1Info",
 				"Example 2": "html/raytracingExample2Info",
 			},			
 		},
 		"XR": {
-			"AR & VR with WebXR":  {
+			"AR & VR with WebXR": {
 				"VR - Panorama": "html/webxr_VR_PanoramaInfo",				
 				"VR - Teleport": "html/webxr_VR_TeleportInfo",
 				"VR - Free Move": "html/webxr_VR_FreeMoveInfo",				
@@ -52,7 +52,7 @@ var list = {
 				"VR - Labelling":"html/webxr_VR_LabellingInfo",
 				"AR - Hit and Build": "html/webxr_AR_HitAndBuildInfo",				
 			},
-			"AR & VR with external libs":  {
+			"AR & VR with external libs": {
 				"VR - Primitives": "html/VR_BasicInfo",
 				"VR - Panorama": "html/VR_PanoramaInfo",
 				"VR - External Models": "html/VR_ExternalModelInfo",
@@ -60,17 +60,17 @@ var list = {
 			},
 		},
 		"Additional Examples": {
-			"Textures - Advanced":  {
+			"Textures - Advanced": {
 				"Environment mapping 1": "html/textureAdvancedCubeMapInfo",
 				"Environment mapping 2": "html/textureAdvancedEquirectangularMapInfo",				
 				"Normal mapping": "html/textureAdvancedNormalMappingInfo",								
 				"Displacement mapping": "html/textureAdvancedDisplacementMappingInfo",												
 			},
-			"Physics":  {
+			"Physics": {
 				"Ammo - Vehicle": "html/ammoVehicleInfo",
 				"Ammo - Breakable Objects": "html/ammoBreakableObjectsInfo",
 			},
-			"Misc":  {
+			"Misc": {
 				"Multicolor Cube": "html/exampleMulticolorCubeInfo",
 				"Linear Interpolation": "html/exampleLerpInfo",				
 				"Group Geometry": "html/exampleGroupInfo",
@@ -79,10 +79,10 @@ var list = {
 				"Fly Controls":"html/exampleFlyControlInfo",		
 				"Joystick Elements":"html/exampleJoystickInfo",						
 			},
-			"Shaders":  {
+			"Shaders": {
 				"Water": "html/exampleShaderWaterInfo",				
 			},			
-			"Auxiliary":  {
+			"Auxiliary": {
 				"Loading Screen": "html/exampleLoadingScreenInfo",
 				"Loading Screen with button": "html/exampleLoadingScreenWithButtonInfo",				
 				"Audio": "html/exampleAudioInfo",				
@@ -90,22 +90,22 @@ var list = {
 
 		},
 		"Exercises RVA (Part 1)": {
-			"1 - Basic":  {
-				"Ex01": "html/01basicEx01Info",
-				"Ex02": "html/keyboardExampleInfo",
-				"Ex03": "html/geometricTransformation1Info",
+			"1 - Basic": {
+				"Ex01": "html/1basicEx01Info",
+				"Ex02": "html/1basicEx02Info",
+				"Ex03": "html/1basicEx03Info",
 			},
 			"2 - Geometric Transformations":  {
-				"Ex01": "html/animationInfo",
-				"Ex02": "html/animationExternalObjectsInfo",
-				"Ex03": "html/animationExternalObjectsInfo",
+				"Ex01": "html/2gtEx01Info",
+				"Ex02": "html/2gtEx02Info",
+				"Ex03": "html/2gtEx03Info",
 			},
 			"3 - Projections & Cameras":  {
-				"Ex01": "html/lightingTypesInfo",
+				"Ex01": "html/3pcEx01Info",
 			},
 			"4 - Animations":  {
-				"Ex01":"html/shadowMapTypesInfo",
-				"Ex02":"html/shadowMapViewerInfo",
+				"Ex01":"html/4animationsEx01Info",
+				"Ex02":"html/4animationsEx02Info",
 			},
 		},
 	},
