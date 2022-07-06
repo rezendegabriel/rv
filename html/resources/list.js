@@ -89,7 +89,7 @@ var list = {
 			},
 
 		},
-		"Exercises RVA (Part 1)": {
+		"Exercises RVA": {
 			"1 - Basic": {
 				"Ex01": "html/1basicEx01Info",
 				"Ex02": "html/1basicEx02Info",
@@ -106,6 +106,9 @@ var list = {
 			"4 - Animations":  {
 				"Ex01":"html/4animationsEx01Info",
 				"Ex02":"html/4animationsEx02Info",
+			},
+			"5 - Light & Shadow": {
+				"Ex01": "html/5lsEx01Info",
 			},
 		},
 	},
