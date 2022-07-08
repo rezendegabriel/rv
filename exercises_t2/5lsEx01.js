@@ -1,16 +1,11 @@
 import * as THREE from  "three";
 import GUI from "../libs/util/dat.gui.module.js";
-import { OrbitControls } from "../build/jsm/controls/OrbitControls.js";
-import KeyboardState from "../libs/util/KeyboardState.js";
+import {OrbitControls} from "../build/jsm/controls/OrbitControls.js";
 import {initRenderer,
-        InfoBox,
-        SecondaryBox,
-        setDefaultMaterial, 
         onWindowResize, 
         degreesToRadians, 
-        createLightSphere,
-        radiansToDegrees} from "../libs/util/util.js";
-import {loadLightPostScene} from "../libs/util/utilScenes.js";
+        createLightSphere} from "../libs/util/util.js";
+import {GLTFLoader} from "../build/jsm/loaders/GLTFLoader.js";
 
 let scene, renderer, camera, orbit;
 
@@ -33,7 +28,45 @@ window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, 
 
 //---------------------------------------------------------
 // Load default scene
+
 loadLightPostScene(scene);
+
+export function loadLightPostScene(scene)
+{
+   // Light Post
+   let loader = new GLTFLoader( );
+   loader.load("../assets/objects/lightPost.glb", function (gltf) {
+      let obj = gltf.scene;
+      obj.traverse(function (child) {
+      if (child) {
+        child.castShadow = true;
+      }});
+
+      obj.traverse(function (node) {
+        if(node.material) node.material.side = THREE.DoubleSide;
+      });
+
+      obj.scale.set(1.0, 0.5, 1.0)
+      scene.add (obj);
+    }, null, null);
+
+   // Ground plane
+   let textureLoader = new THREE.TextureLoader();
+   let floor = textureLoader.load("../assets/textures/intertravado.jpg");
+   let planeGeometry = new THREE.PlaneGeometry(15, 15, 80, 80);
+   let planeMaterial = new THREE.MeshLambertMaterial({side:THREE.DoubleSide});
+   let groundPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+       groundPlane.receiveShadow = true;
+       groundPlane.rotateX(-1.5708);
+       groundPlane.material.map = floor;  
+       groundPlane.material.map.wrapS = THREE.RepeatWrapping;
+       groundPlane.material.map.wrapT = THREE.RepeatWrapping;       
+       groundPlane.material.map.repeat.set(6,6); 
+
+   scene.add(groundPlane);
+}
+
+//---------------------------------------------------------
 
 // Red prism
 var rPrismGeometry = new THREE.BoxGeometry(0.5, 1, 0.5, 25);
