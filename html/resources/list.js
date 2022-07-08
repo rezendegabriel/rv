@@ -110,6 +110,18 @@ var list = {
 			"5 - Light & Shadow": {
 				"Ex01": "html/5lsEx01Info",
 			},
+			"6 - Materials & Shading": {
+				"Ex01": "html/6msEx01Info",
+			},
+			"7 - 3D Object Representation":  {
+				"Ex01": "html/7obj3DEx01Info",
+				"Ex02": "html/7obj3DEx02Info",
+				"Ex03": "html/7obj3DEx03Info",
+			},
+			"8 - Textures":  {
+				"Ex01":"html/8texturesEx01Info",
+				"Ex02":"html/8texturesEx02Info",
+			},
 		},
 	},
 };
