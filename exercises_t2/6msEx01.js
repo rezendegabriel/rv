@@ -45,10 +45,10 @@ scene.add(cone);
 // Teapot
 let teapotColor = "rgb(255, 20, 20)"; // Define the color of the object
 let teapotShininess = "100"; // Define the shininess of the object
-let teapotspecular = "rgb(255,255,255)"; // Color of the specular component
+let teapotSpecular = "rgb(255,255,255)"; // Color of the specular component
 
 let teapotGeometry = new TeapotGeometry(1.5);
-let teapotMaterial = new THREE.MeshPhongMaterial({color: teapotColor, shininess: teapotShininess, specular: teapotspecular});
+let teapotMaterial = new THREE.MeshPhongMaterial({color: teapotColor, shininess: teapotShininess, specular: teapotSpecular});
   teapotMaterial.side = THREE.DoubleSide;
 let teapot = new THREE.Mesh(teapotGeometry, teapotMaterial);
   teapot.castShadow = true;
