@@ -86,7 +86,7 @@ function normalizeAndRescale(obj, newScale)
 function fixPosition(obj)
 {
   // Fix position of the object over the ground plane
-  var box = new THREE.Box3().setFromObject( obj );
+  var box = new THREE.Box3().setFromObject(obj);
 
   if(box.min.y > 0)
     obj.translateY(-box.min.y);

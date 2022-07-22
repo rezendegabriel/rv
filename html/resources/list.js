@@ -89,7 +89,7 @@ var list = {
 			},
 
 		},
-		"Exercises RVA": {
+		"Exercises CG": {
 			"1 - Basic": {
 				"Ex01": "html/1basicEx01Info",
 				"Ex02": "html/1basicEx02Info",
@@ -122,6 +122,12 @@ var list = {
 				"Ex01":"html/8texturesEx01Info",
 				"Ex02":"html/8texturesEx02Info",
 			},
+		},
+		"Exercises RA": {
+			"T3": {
+				"Environment 1": "html/environment1Info",
+				"Environment 2": "html/environment2Info",
+			}
 		},
 	},
 };

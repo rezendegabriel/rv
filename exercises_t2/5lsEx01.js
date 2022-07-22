@@ -29,41 +29,44 @@ window.addEventListener("resize", function(){onWindowResize(camera, renderer)}, 
 //---------------------------------------------------------
 // Load default scene
 
-loadLightPostScene(scene);
+let post = loadLightPostScene(scene);
 
 export function loadLightPostScene(scene)
 {
-   // Light Post
-   let loader = new GLTFLoader( );
-   loader.load("../assets/objects/lightPost.glb", function (gltf) {
-      let obj = gltf.scene;
-      obj.traverse(function (child) {
-      if (child) {
-        child.castShadow = true;
-      }});
+  // Light Post
+  let obj = null;
+  let loader = new GLTFLoader( );
+  loader.load("../assets/objects/lightPost.glb", function (gltf) {
+    obj = gltf.scene;
+    obj.traverse(function (child) {
+    if (child) {
+      child.castShadow = true;
+    }});
 
-      obj.traverse(function (node) {
-        if(node.material) node.material.side = THREE.DoubleSide;
-      });
+    obj.traverse(function (node) {
+      if(node.material) node.material.side = THREE.DoubleSide;
+    });
 
-      obj.scale.set(1.0, 0.5, 1.0)
-      scene.add (obj);
-    }, null, null);
+    obj.scale.set(1.0, 0.5, 1.0);
+    scene.add (obj);
+  }, null, null);
 
-   // Ground plane
-   let textureLoader = new THREE.TextureLoader();
-   let floor = textureLoader.load("../assets/textures/intertravado.jpg");
-   let planeGeometry = new THREE.PlaneGeometry(15, 15, 80, 80);
-   let planeMaterial = new THREE.MeshLambertMaterial({side:THREE.DoubleSide});
-   let groundPlane = new THREE.Mesh(planeGeometry, planeMaterial);
-       groundPlane.receiveShadow = true;
-       groundPlane.rotateX(-1.5708);
-       groundPlane.material.map = floor;  
-       groundPlane.material.map.wrapS = THREE.RepeatWrapping;
-       groundPlane.material.map.wrapT = THREE.RepeatWrapping;       
-       groundPlane.material.map.repeat.set(6,6); 
+  // Ground plane
+  let textureLoader = new THREE.TextureLoader();
+  let floor = textureLoader.load("../assets/textures/intertravado.jpg");
+  let planeGeometry = new THREE.PlaneGeometry(15, 15, 80, 80);
+  let planeMaterial = new THREE.MeshLambertMaterial({side:THREE.DoubleSide});
+  let groundPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+    groundPlane.receiveShadow = true;
+    groundPlane.rotateX(-1.5708);
+    groundPlane.material.map = floor;  
+    groundPlane.material.map.wrapS = THREE.RepeatWrapping;
+    groundPlane.material.map.wrapT = THREE.RepeatWrapping;       
+    groundPlane.material.map.repeat.set(6,6); 
+    
+  scene.add(groundPlane);
 
-   scene.add(groundPlane);
+  return obj;
 }
 
 //---------------------------------------------------------
@@ -141,13 +144,15 @@ function setSpotLight(position)
 }
 
 // Update Spotlight
-function updateSpotLight() {
+function updateSpotLight()
+{
   spotLight.target.updateMatrixWorld();
   spotSphere.position.copy(spotLight.position);
   spotLight.shadow.camera.updateProjectionMatrix();
 }
 
-function makeXZGUI(gui, vector3, name, onChangeFn) {
+function makeXZGUI(gui, vector3, name, onChangeFn)
+{
   const folder = gui.addFolder(name);
   folder.add(vector3, "x", -10, 10).onChange(onChangeFn);
   folder.add(vector3, "z", -10, 10).onChange(onChangeFn);
@@ -186,7 +191,7 @@ function buildInterface()
 
   //makeXZGUI(spotFolder, spotLight.position, "Position", updateSpotLight);
   makeXZGUI(spotFolder, spotLight.target.position, "Target", updateSpotLight);
-
+  
   gui.add(controls, "ambientLight", true)
     .name("Ambient Light")
     .onChange(function(e) {controls.onEnableAmbientLight()});
