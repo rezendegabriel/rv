@@ -127,7 +127,7 @@ var list = {
 			"T3": {
 				"Environment 1": "html/environment1Info",
 				"Environment 2": "html/environment2Info",
-			}
+			},
 		},
 	},
 };
