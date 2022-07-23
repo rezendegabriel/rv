@@ -20,6 +20,9 @@ scene.add(ambientLight);
 var camera = new THREE.Camera();
 scene.add(camera);
 
+let pointLight = new THREE.PointLight(0xffffff, 1, 50);
+camera.add(pointLight);
+
 // Init render
 var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
 	renderer.setClearColor(new THREE.Color("lightgrey"), 0)
@@ -83,9 +86,6 @@ arToolkitContext.init(function onCompleted() {
 
 let letters = ["a", "b", "c", "d", "g", "f"];
 
-let objectNames = ["cow", "dolphins", "f16", "flowers", "soccerball", "toucan"];
-let objectSacles = [2.0, 1.5, 2.2, 1.5, 1.2, 2.0];
-
 let markerHiro = new THREE.Group();
 scene.add(markerHiro);
 let markerControlsLetters = new ARjs.MarkerControls(arToolkitContext, markerHiro, {	
@@ -121,11 +121,11 @@ var objectArray = new Array()
 var activeObject = 0;
 
 loadPLYFile("../assets/objects/", "cow", false, 2.0, markerLetters[0]);
-loadOBJFile("../assets/objects/", "dolphins", true, 1.5, markerLetters[0]);
-loadOBJFile("../assets/objects/", "f16", false, 2.2, markerLetters[0]);
-loadOBJFile("../assets/objects/", "flowers", false, 1.5, markerLetters[0]);
-loadOBJFile("../assets/objects/", "soccerball", false, 1.2, markerLetters[0]);
-loadGLBFile("../assets/objects/", "toucan", false, 2.0, markerLetters[0]);
+loadOBJFile("../assets/objects/", "dolphins", true, 1.5, markerLetters[1]);
+loadOBJFile("../assets/objects/", "f16", false, 2.2, markerLetters[2]);
+loadOBJFile("../assets/objects/", "flowers", false, 1.5, markerLetters[3]);
+loadOBJFile("../assets/objects/", "soccerball", false, 1.2, markerLetters[4]);
+loadGLBFile("../assets/objects/", "toucan", false, 2.0, markerLetters[5]);
 
 function loadPLYFile(modelPath, modelName, visibility, desiredScale, markerLetter)
 {
@@ -268,34 +268,56 @@ function showInformation()
 //----------------------------------------------------------------------------
 // Render the whole thing on the page
 
+var changeScale = false;
+
 // Update artoolkit on every frame
 function update()
 {
 	if(arToolkitSource.ready !== false) arToolkitContext.update(arToolkitSource.domElement);
 
+	// Each object in a respective marker
 	if(markerHiro.visible) {
-		objectArray[0].visible = true;
+		for(let i = 0; i < 6; i++) {
+			let object = objectArray[i];
 
-		for(let i = 1; i < 6; i++) {
-			objectArray[i].visible = true;
-			markerLetters[i].add(objectArray[i]);
+			markerLetters[i].add(object); // After Kanji
 
+			object.visible = true; // All objects visible
+
+			// Reposition objects after Kanji
 			let relativePosition = markerLetters[i].worldToLocal(markerLetters[i].position.clone());
-			objectArray[i].position.copy(relativePosition);
+			object.position.copy(relativePosition);
 		}
+
+		changeScale = false;
 	}
 	else {
+		// A centralized object
 		if(markerKanji.visible) {
-			objectArray[activeObject].visible = true;
+			let currentObj = objectArray[activeObject];
+			currentObj.visible = true; // Only current object visible
 
 			for(let i = 0; i < 6; i++) {
+				let object = objectArray[i];
+
 				if(i != activeObject)
-					objectArray[i].visible = false;
+					object.visible = false;
 
-				markerLetters[i].add(objectArray[activeObject]);
+				markerLetters[i].clear();
+			}
 
-				let relativePosition = markerLetters[i].worldToLocal(markerLetters[activeObject].position.clone());
-				objectArray[activeObject].position.copy(relativePosition);
+			for(let i = 0; i < 6; i++) {
+				if(markerLetters[i].visible) {
+					markerLetters[i].add(currentObj);
+
+					// Centralize object
+					let relativePosition = markerLetters[i].worldToLocal(markerLetters[4].position.clone());
+					currentObj.position.copy(relativePosition);
+					let relativeZ = markerLetters[2].worldToLocal(markerLetters[4].position.clone());
+					currentObj.translateZ(-relativeZ.getComponent(2)/2);
+					
+					break;
+				}
 			}
 		}
 		else {
