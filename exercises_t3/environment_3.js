@@ -2,12 +2,10 @@ import * as THREE from "three";
 import GUI from "../libs/util/dat.gui.module.js";
 import {ARjs} from  "../libs/AR/ar.js";
 import {GLTFLoader} from "../build/jsm/loaders/GLTFLoader.js";
-import {OBJLoader} from "../build/jsm/loaders/OBJLoader.js";
-import {PLYLoader} from "../build/jsm/loaders/PLYLoader.js";
-import {MTLLoader} from "../build/jsm/loaders/MTLLoader.js";
 import {InfoBox,
 		SecondaryBox,
-		getMaxSize,} from "../libs/util/util.js";
+		getMaxSize,
+		degreesToRadians} from "../libs/util/util.js";
 
 // Init scene
 var scene = new THREE.Scene();
@@ -86,20 +84,6 @@ arToolkitContext.init(function onCompleted() {
 
 let letters = ["a", "b", "c", "d", "g", "f"];
 
-let markerHiro = new THREE.Group();
-scene.add(markerHiro);
-let markerControlsLetters = new ARjs.MarkerControls(arToolkitContext, markerHiro, {	
-	type: "pattern",
-	patternUrl: "../libs/AR/data/patt.hiro",
-});
-
-let markerKanji = new THREE.Group();
-scene.add(markerKanji);
-let markerControlsCenterLetters = new ARjs.MarkerControls(arToolkitContext, markerKanji, {	
-	type: "pattern",
-	patternUrl: "../libs/AR/data/patt.kanji",
-});
-
 var markerLetters = new Array();
 
 for(let i = 0; i < 6; i++) {
@@ -120,34 +104,20 @@ for(let i = 0; i < 6; i++) {
 var objectArray = new Array()
 var activeObject = 0;
 
-loadPLYFile("../assets/objects/", "cow", false, 2.0, markerLetters[0]);
-loadOBJFile("../assets/objects/", "dolphins", true, 1.5, markerLetters[1]);
-loadOBJFile("../assets/objects/", "f16", false, 2.2, markerLetters[2]);
-loadOBJFile("../assets/objects/", "flowers", false, 1.5, markerLetters[3]);
-loadOBJFile("../assets/objects/", "soccerball", false, 1.2, markerLetters[4]);
-loadGLBFile("../assets/objects/", "toucan", false, 2.0, markerLetters[5]);
+// Animation parameters
+var walkingMan = null;
+var playAction = true;
+var time = 0;
+var mixer = new Array();
 
-function loadPLYFile(modelPath, modelName, visibility, desiredScale, markerLetter)
-{
-	var loader = new PLYLoader();
-  	loader.load(modelPath + modelName + ".ply", function(geometry) {
-    	geometry.computeVertexNormals();
+loadGLBFileAnimation("../assets/objects/", "dog", true, 2.5, true);
+loadGLBFileAnimation("../assets/objects/", "windmill", false, 2.5, true);
+loadGLBFileAnimation("../assets/objects/", "walkingMan", false, 2.5, false);
+loadGLBFile("../assets/objects/", "toucan", false, 2.5);
+loadGLBFile("../assets/objects/", "toon_tank", false, 2.5);
+loadGLBFile("../assets/objects/", "woodenGoose", false, 2.5);
 
-    	var material = new THREE.MeshPhongMaterial({color:"rgb(255, 120, 50)"});
-    	var obj = new THREE.Mesh(geometry, material);
-			obj.name = modelName;
-			obj.visible = visibility;
-
-    	var obj = normalizeAndRescale(obj, desiredScale);
-    	var obj = fixPosition(obj);
-
-		objectArray.push(obj);
-		markerLetter.add(obj);
-	}, onProgress, onError);
-}
-
-function loadGLBFile(modelPath, modelName, visibility, desiredScale, markerLetter)
-{
+function loadGLBFile(modelPath, modelName, visibility, desiredScale) {
 	var loader = new GLTFLoader();
   	loader.load(modelPath + modelName + ".glb", function(gltf) {
     	var obj = gltf.scene;
@@ -162,41 +132,40 @@ function loadGLBFile(modelPath, modelName, visibility, desiredScale, markerLette
     	var obj = fixPosition(obj);
 
 		objectArray.push(obj);
-		markerLetter.add(obj);
     }, onProgress, onError);
 }
 
-function loadOBJFile(modelPath, modelName, visibility, desiredScale, markerLetter)
-{
-	var manager = new THREE.LoadingManager();
+function loadGLBFileAnimation(modelPath, modelName, visibility, desiredScale, centerObject) {
+	var loader = new GLTFLoader();
+  	loader.load(modelPath + modelName + ".glb", function(gltf) {
+    	var obj = gltf.scene;
+    		obj.name = modelName;
+    		obj.visible = visibility;
 
-  	var mtlLoader = new MTLLoader(manager);
-	mtlLoader.setPath(modelPath);
-	mtlLoader.load(modelName + ".mtl", function(materials) {
-		materials.preload();
+    		obj.traverse(function(node) {
+      			if(node.material) node.material.side = THREE.DoubleSide;
+    		});
 
-		var objLoader = new OBJLoader(manager);
-		objLoader.setMaterials(materials);
-		objLoader.setPath(modelPath);
-		objLoader.load(modelName + ".obj", function (obj) {
-			obj.name = modelName;
-			obj.visible = visibility;
-			
-			obj.traverse(function(node) {
-				if(node.material) node.material.side = THREE.DoubleSide;
-			});
+    	// Only fix the position of the centered object
+		// The man around will have a different geometric transformation
+		if(centerObject) {
+			obj = normalizeAndRescale(obj, desiredScale);
+			obj = fixPosition(obj);
+		}
+		else
+			walkingMan = obj;
 
-			var obj = normalizeAndRescale(obj, desiredScale);
-			var obj = fixPosition(obj);
+		objectArray.push(obj);
 
-			objectArray.push(obj);
-			markerLetter.add(obj);
+		// Pick the index of the first visible object
+		if(modelName == "dog")
+			activeObject = objectArray.length-1;
 
-			// Pick the index of the first visible object
-			if(modelName == "dolphins")
-				activeObject = objectArray.length-1;
-		}, onProgress, onError );
-	});
+		// Create animationMixer and push it in the array of mixers
+		var mixerLocal = new THREE.AnimationMixer(obj);
+		mixerLocal.clipAction(gltf.animations[0]).play();
+		mixer.push(mixerLocal);
+    }, onProgress, onError);
 }
 
 function onError() { };
@@ -233,11 +202,30 @@ function fixPosition(obj)
 	return obj;
 }
 
+// Function to rotate the man around the center object
+//function rotateWalkingMan(delta)
+//{
+	//if(walkingMan) {
+	//	time+=delta*25;
+
+    //	var mat4 = new THREE.Matrix4();
+    //	walkingMan.matrixAutoUpdate = false;
+    //	walkingMan.matrix.identity(); // Reset matrix
+    //	walkingMan.matrix.multiply(mat4.makeRotationY(degreesToRadians(-time)));
+    //	walkingMan.matrix.multiply(mat4.makeTranslation(1.0, 0.0, 0.0));
+	//	walkingMan.rotationY()
+  	//}
+//}
+
 //---------------------------------------------------------
 // Interface
 
 var controls = new function() {
 	this.type = "";
+
+	this.onPlayAnimation = function(){
+		playAction = !playAction;
+	};
 
 	this.onChooseObject = function() {
 		objectArray[activeObject].visible = false;
@@ -247,13 +235,15 @@ var controls = new function() {
 		objectArray[activeObject].visible = true;
 		infoBox.changeMessage(objectArray[activeObject].name);
 	};
+	
 };
 
 // GUI interface
 var gui = new GUI();
+gui.add(controls, "onPlayAnimation").name("Play/Stop Animation");
 gui.add(controls, "type",
-	["Object0", "Object1", "Object2", "Object3",
-	"Object4", "Object5"])
+	["Object0", "Object1", "Object2", "Object3", "Object4", "Object5"])
+	//["Object0", "Object1", "Object2", "Object3", "Object4"])
 	.name("Change Object")
 	.onChange(function(e) {controls.onChooseObject();});
 
@@ -261,7 +251,7 @@ gui.add(controls, "type",
 function showInformation()
 {
 	controls = new InfoBox();
-		controls.add("Put the 'HIRO' or 'KANJI' markers with ABCDGF letters in front of the camera.");
+		controls.add("Put the 'ABCDGF' letters in front of the camera.");
 		controls.show();
 }
 
@@ -275,54 +265,29 @@ function update()
 {
 	if(arToolkitSource.ready !== false) arToolkitContext.update(arToolkitSource.domElement);
 
-	// Each object in a respective marker
-	if(markerHiro.visible) {
-		for(let i = 0; i < 6; i++) {
-			let object = objectArray[i];
+	let currentObj = objectArray[activeObject];
+	currentObj.visible = true; // Only current object visible
 
-			markerLetters[i].add(object); // After Kanji
+	for(let i = 0; i < 6; i++) {
+		let object = objectArray[i];
 
-			object.visible = true; // All objects visible
+		if(i != activeObject)
+			object.visible = false;
 
-			// Reposition objects after Kanji
-			let relativePosition = markerLetters[i].worldToLocal(markerLetters[i].position.clone());
-			object.position.copy(relativePosition);
-		}
-
-		changeScale = false;
+		markerLetters[i].clear();
 	}
-	else {
-		// A centralized object
-		if(markerKanji.visible) {
-			let currentObj = objectArray[activeObject];
-			currentObj.visible = true; // Only current object visible
 
-			for(let i = 0; i < 6; i++) {
-				let object = objectArray[i];
+	for(let i = 0; i < 6; i++) {
+		if(markerLetters[i].visible) {
+			markerLetters[i].add(currentObj);
 
-				if(i != activeObject)
-					object.visible = false;
+			// Centralize object
+			let relativePosition = markerLetters[i].worldToLocal(markerLetters[4].position.clone());
+			currentObj.position.copy(relativePosition);
+			let relativeVector = markerLetters[2].worldToLocal(markerLetters[4].position.clone());
+			currentObj.translateZ(-relativeVector.getComponent(2)/2);
 
-				markerLetters[i].clear();
-			}
-
-			for(let i = 0; i < 6; i++) {
-				if(markerLetters[i].visible) {
-					markerLetters[i].add(currentObj);
-
-					// Centralize object
-					let relativePosition = markerLetters[i].worldToLocal(markerLetters[4].position.clone());
-					currentObj.position.copy(relativePosition);
-					let relativeZ = markerLetters[2].worldToLocal(markerLetters[4].position.clone());
-					currentObj.translateZ(-relativeZ.getComponent(2)/2);
-					
-					break;
-				}
-			}
-		}
-		else {
-			for(let i = 0; i < 6; i++)
-				objectArray[i].visible = false;
+			break;
 		}
 	}
 }
@@ -342,4 +307,12 @@ function animate()
 	totalTime+=deltaTime;
 	update();
 	render();
+
+	// Animation control
+	if(playAction) {
+		for(var i = 0; i < mixer.length; i++)
+			mixer[i].update(deltaTime);
+
+		//rotateWalkingMan(deltaTime);
+	}
 }
