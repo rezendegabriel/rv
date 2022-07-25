@@ -252,8 +252,7 @@ var controls = new function() {
 // GUI interface
 var gui = new GUI();
 gui.add(controls, "type",
-	["Object0", "Object1", "Object2", "Object3",
-	"Object4", "Object5"])
+	["Object0", "Object1", "Object2", "Object3", "Object4", "Object5"])
 	.name("Change Object")
 	.onChange(function(e) {controls.onChooseObject();});
 
