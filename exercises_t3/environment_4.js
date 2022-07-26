@@ -111,9 +111,9 @@ let ballTexture = new THREE.MeshLambertMaterial({
 });
 let ballMesh = new THREE.Mesh(ballGeometry, ballTexture);
 ballMesh.castShadow = true;
-scene.add(ballMesh);
 //markerHiro.add(ballMesh);
 //sceneGroup.add(ballMesh);
+scene.add(ballMesh);
 
 // Init light
 let pointLight = new THREE.PointLight(0xffffff, 1, 100);
@@ -122,12 +122,13 @@ pointLight.castShadow = true;
 
 let ambientLight = new THREE.AmbientLight("rgb(50, 50, 50)");
 
+//markerHiro.add(pointLight);
+//markerHiro.add(ambientLight);
 sceneGroup.add(pointLight);
 sceneGroup.add(ambientLight);
 //scene.add(pointLight);
 //scene.add(ambientLight);
-//markerHiro.add(pointLight);
-//markerHiro.add(ambientLight);
+
 
 // Default normal of plane is 0, 0, 1
 // Aplly mesh rotation to it
