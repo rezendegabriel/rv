@@ -249,7 +249,7 @@ function fixPosition(obj)
 // Spotlight
 
 let spotLightColor = "rgb(255, 255, 255)";
-let spotLightPosition = new THREE.Vector3(1.25, 2.5, 0.0);
+let spotLightPosition = new THREE.Vector3(0.0, 2.5, 0.0);
 let spotLight = new THREE.SpotLight(spotLightColor);
 let spotLightSphere = createLightSphere(markerRootLight, 0.05, 10, 10, spotLightPosition);
 	spotLight.position.copy(spotLightPosition);
@@ -263,6 +263,10 @@ let spotLightSphere = createLightSphere(markerRootLight, 0.05, 10, 10, spotLight
 	spotLight.shadow.mapSize.width = 512;
 	spotLight.shadow.mapSize.height = 512;
 markerRootLight.add(spotLight);
+
+let spotLightTarget = createLightSphere(markerRootLight, 0.025, 10, 10, spotLight.target.position);
+spotLight.target = spotLightTarget;
+markerRootLight.add(spotLightTarget);
 
 function updateSpotLight() {
 	spotLight.target.updateMatrixWorld();
@@ -299,7 +303,7 @@ var gui = new GUI();
 
 var spotLightFolder = gui.addFolder("Spotligh Parameters");
 spotLightFolder.open();
-makeXYZGUI(spotLightFolder, spotLight.position, "position", updateSpotLight);
+//makeXYZGUI(spotLightFolder, spotLight.position, "position", updateSpotLight);
 makeXYZGUI(spotLightFolder, spotLight.target.position, "target", updateSpotLight);
 
 gui.add(controls, "type",

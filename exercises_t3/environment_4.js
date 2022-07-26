@@ -98,15 +98,22 @@ floorMaterial.opacity = 0.3;
 let floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
 floorMesh.rotation.x = -Math.PI/2;
 floorMesh.receiveShadow = true;
+//markerHiro.add(floorMesh);
 sceneGroup.add(floorMesh);
+//scene.add(floorMesh);
 
 // Ball
 let ballGeometry = new THREE.SphereGeometry(0.25, 32, 32);
 let loaderTexture = new THREE.TextureLoader();
-let ballTexture = new THREE.MeshLambertMaterial({map: loaderTexture.load("../assets/textures/basketball-gray.png"), color: 0xff8800});
+let ballTexture = new THREE.MeshLambertMaterial({
+	map: loaderTexture.load("../assets/textures/basketball-gray.png"),
+	color: 0xff8800
+});
 let ballMesh = new THREE.Mesh(ballGeometry, ballTexture);
 ballMesh.castShadow = true;
 scene.add(ballMesh);
+//markerHiro.add(ballMesh);
+//sceneGroup.add(ballMesh);
 
 // Init light
 let pointLight = new THREE.PointLight(0xffffff, 1, 100);
@@ -117,6 +124,10 @@ let ambientLight = new THREE.AmbientLight("rgb(50, 50, 50)");
 
 sceneGroup.add(pointLight);
 sceneGroup.add(ambientLight);
+//scene.add(pointLight);
+//scene.add(ambientLight);
+//markerHiro.add(pointLight);
+//markerHiro.add(ambientLight);
 
 // Default normal of plane is 0, 0, 1
 // Aplly mesh rotation to it
@@ -148,10 +159,16 @@ function update()
 			new THREE.Vector3(0, 1, 0).applyQuaternion(sceneGroup.getWorldQuaternion()),
 			sceneGroup.getWorldPosition()
 		);
+		//renderer.clippingPlanes[0].setFromNormalAndCoplanarPoint(
+			//new THREE.Vector3(0, 1, 0).applyQuaternion(markerHiro.getWorldQuaternion()),
+			//markerHiro.getWorldPosition()
+		//);
 
 		let p = parabolicPath(markerHiro.getWorldPosition(), markerKanji.getWorldPosition(), (totalTime/1) % 4 - 1);
+		//let p = linearPath(markerHiro.getWorldPosition(), markerKanji.getWorldPosition(), (totalTime/1) % 4 - 1);
+
 		ballMesh.position.copy(p);
-		ballMesh.rotation.z += 0.1;
+		ballMesh.rotation.z -= 0.05;
 	}
 }
 
@@ -168,6 +185,19 @@ function parabolicPath(pointStart, pointEnd, time)
 		parabolaEvaluate(pointStart.x, pointMiddle.x, pointEnd.x, time),
 		parabolaEvaluate(pointStart.y, pointMiddle.y, pointEnd.y, time),
 		parabolaEvaluate(pointStart.z, pointMiddle.z, pointEnd.z, time)
+	);
+}
+
+function linearEvaluate(p0, p1, t)
+{
+	return (-0.5(3*p0 - 4*p1))*t + (p0);
+}
+
+function linearPath(pointStart, pointEnd, time) {
+	return new THREE.Vector3(
+		linearEvaluate(pointStart.x, pointEnd.x, time),
+		linearEvaluate(pointStart.y, pointEnd.y, time),
+		linearEvaluate(pointStart.z, pointEnd.z, time)
 	);
 }
 
