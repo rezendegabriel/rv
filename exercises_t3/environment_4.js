@@ -25,7 +25,7 @@ var deltaTime = 0;
 var totalTime = 0;
 
 // Show text information onscreen
-showInformation();
+//showInformation();
 
 //----------------------------------------------------------------------------
 // Handle arToolkitSource
@@ -43,11 +43,24 @@ function onResize() {
 	}
 }
 
+//function onResize() {
+//	arToolkitSource.onResize();
+//	arToolkitSource.copySizeTo(renderer.domElement);
+//
+//	if(arToolkitContext.arController !== null) {
+//		arToolkitSource.copySizeTo(arToolkitContext.arController.canvas);
+//	}
+//}
+
 arToolkitSource.init(function onReady() {
 	setTimeout(() => {
 		onResize()
 	}, 2000);
 });
+
+//arToolkitSource.init(function onReady() {
+//	onResize()
+//});
 
 // Handle resize
 window.addEventListener("resize", function() {
@@ -71,21 +84,21 @@ arToolkitContext.init(function onCompleted() {
 //----------------------------------------------------------------------------
 // Setup markerRoots
 
-var markerHiro = new THREE.Group();
+markerHiro = new THREE.Group();
 scene.add(markerHiro);
 let markerControlHiro = new ARjs.MarkerControls(arToolkitContext, markerHiro, {	
 	type: "pattern",
 	patternUrl: "../libs/AR/data/patt.hiro",
 });
 
-var markerKanji = new THREE.Group();
+markerKanji = new THREE.Group();
 scene.add(markerKanji);
 let markerControlKanji = new ARjs.MarkerControls(arToolkitContext, markerKanji, {	
 	type: "pattern",
 	patternUrl: "../libs/AR/data/patt.kanji",
 });
 
-let sceneGroup = new THREE.Group();
+sceneGroup = new THREE.Group();
 markerHiro.add(sceneGroup);
 
 //---------------------------------------------------------
@@ -129,7 +142,6 @@ sceneGroup.add(ambientLight);
 //scene.add(pointLight);
 //scene.add(ambientLight);
 
-
 // Default normal of plane is 0, 0, 1
 // Aplly mesh rotation to it
 let clipPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0));
@@ -139,12 +151,12 @@ renderer.clippingPlanes = [clipPlane];
 // Interface
 
 // Use this to show information onscreen
-function showInformation()
-{
-	var controls = new InfoBox();
-		controls.add("Put the 'HIRO' and 'KANJI' markers in front of the camera.");
-		controls.show();
-}
+//function showInformation()
+//{
+//	var controls = new InfoBox();
+//		controls.add("Put the 'HIRO' and 'KANJI' markers in front of the camera.");
+//		controls.show();
+//}
 
 //----------------------------------------------------------------------------
 // Render the whole thing on the page

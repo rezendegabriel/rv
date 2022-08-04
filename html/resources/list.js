@@ -125,10 +125,15 @@ var list = {
 		},
 		"Exercises RA": {
 			"T3": {
-				"Environment 1": "html/environment1Info",
-				"Environment 2": "html/environment2Info",
-				"Environment 3": "html/environment3Info",
-				"Environment 4": "html/environment4Info",
+				"Environment 1": "html/t3_environment1Info",
+				"Environment 2": "html/t3_environment2Info",
+				"Environment 3": "html/t3_environment3Info",
+				"Environment 4": "html/t3_environment4Info",
+			},
+		},
+		"Exercises VR": {
+			"T4": {
+				"Environment 1": "html/t4_environment1Info",
 			},
 		},
 	},
