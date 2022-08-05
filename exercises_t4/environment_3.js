@@ -78,6 +78,14 @@ var scaleBar = new THREE.Mesh(scaleBarGeo, scaleBarMat);
 
 scene.add(scaleBar);
 
+var scaleMarkGeo = new THREE.CircleGeometry(0.075, 32);
+var scaleMarkMat = new THREE.MeshBasicMaterial({
+	color: "rgb(0, 0, 255)",
+	transparent: true});
+var scaleMark = new THREE.Mesh(scaleMarkGeo, scaleMarkMat);
+
+scaleBar.add(scaleMark);
+
 var rotateBarGeo = new THREE.PlaneGeometry(1.5, 0.075);
 var rotateBarMat = new THREE.MeshBasicMaterial({
 	color: "rgb(255, 0, 0)",
@@ -87,6 +95,14 @@ var rotateBar = new THREE.Mesh(rotateBarGeo, rotateBarMat);
 	rotateBar.position.set(0, -0.25, -2);
 
 scene.add(rotateBar);
+
+var rotateMarkGeo = new THREE.CircleGeometry(0.075, 32);
+var rotateMarkMat = new THREE.MeshBasicMaterial({
+	color: "rgb(0, 0, 255)",
+	transparent: true});
+var rotateMark = new THREE.Mesh(rotateMarkGeo, rotateMarkMat);
+
+rotateBar.add(rotateMark);
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 
