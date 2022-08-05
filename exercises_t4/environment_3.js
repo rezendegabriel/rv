@@ -56,7 +56,7 @@ let controller1 = renderer.xr.getController(0);
 scene.add(controller1);
 
 // VR Camera Rectile 
-var ringGeo = new THREE.RingGeometry(0.02, 0.04, 32);
+var ringGeo = new THREE.RingGeometry(0.025, 0.05, 32);
 var ringMat = new THREE.MeshBasicMaterial({
 	color: "rgb(255, 255, 0)",
 	opacity: 0.9, 
@@ -65,44 +65,6 @@ var rectile = new THREE.Mesh(ringGeo, ringMat);
  	rectile.position.set(0, 0, -2);
 
 controller1.add(rectile);
-
-//-- Slide bars ----------------------------------------------------------------------------------
-
-var scaleBarGeo = new THREE.PlaneGeometry(0.075, 1.5);
-var scaleBarMat = new THREE.MeshBasicMaterial({
-	color: "rgb(255, 0, 0)",
-	opacity: 0.9,
-	transparent: true});
-var scaleBar = new THREE.Mesh(scaleBarGeo, scaleBarMat);
-	scaleBar.position.set(-1.25, 1, -2);
-
-scene.add(scaleBar);
-
-var scaleMarkGeo = new THREE.CircleGeometry(0.075, 32);
-var scaleMarkMat = new THREE.MeshBasicMaterial({
-	color: "rgb(0, 0, 255)",
-	transparent: true});
-var scaleMark = new THREE.Mesh(scaleMarkGeo, scaleMarkMat);
-
-scaleBar.add(scaleMark);
-
-var rotateBarGeo = new THREE.PlaneGeometry(1.5, 0.075);
-var rotateBarMat = new THREE.MeshBasicMaterial({
-	color: "rgb(255, 0, 0)",
-	opacity: 0.9,
-	transparent: true});
-var rotateBar = new THREE.Mesh(rotateBarGeo, rotateBarMat);
-	rotateBar.position.set(0, -0.25, -2);
-
-scene.add(rotateBar);
-
-var rotateMarkGeo = new THREE.CircleGeometry(0.075, 32);
-var rotateMarkMat = new THREE.MeshBasicMaterial({
-	color: "rgb(0, 0, 255)",
-	transparent: true});
-var rotateMark = new THREE.Mesh(rotateMarkGeo, rotateMarkMat);
-
-rotateBar.add(rotateMark);
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 
@@ -286,4 +248,44 @@ function createScene()
 	loadOBJFile("../assets/objects/", "littleCow", 3, 90, true);
 
 	base.add(objectsGroup);
+
+	// Slide bars
+
+	var scaleBarGeo = new THREE.PlaneGeometry(0.075, 1.5);
+	var scaleBarMat = new THREE.MeshBasicMaterial({
+		color: "rgb(255, 0, 0)",
+		opacity: 0.9,
+		transparent: true});
+	var scaleBar = new THREE.Mesh(scaleBarGeo, scaleBarMat);
+		scaleBar.position.set(-1.25, 1, -2);
+
+	scene.add(scaleBar);
+
+	var scaleMarkGeo = new THREE.CircleGeometry(0.075, 32);
+	var scaleMarkMat = new THREE.MeshBasicMaterial({
+		color: "rgb(0, 0, 255)",
+		transparent: true});
+	var scaleMark = new THREE.Mesh(scaleMarkGeo, scaleMarkMat);
+
+	slideBarsGroup.add(scaleMark);
+	scaleBar.add(scaleMark);
+
+	var rotateBarGeo = new THREE.PlaneGeometry(1.5, 0.075);
+	var rotateBarMat = new THREE.MeshBasicMaterial({
+		color: "rgb(255, 0, 0)",
+		opacity: 0.9,
+		transparent: true});
+	var rotateBar = new THREE.Mesh(rotateBarGeo, rotateBarMat);
+		rotateBar.position.set(0, -0.25, -2);
+
+	scene.add(rotateBar);
+
+	var rotateMarkGeo = new THREE.CircleGeometry(0.075, 32);
+	var rotateMarkMat = new THREE.MeshBasicMaterial({
+		color: "rgb(0, 0, 255)",
+		transparent: true});
+	var rotateMark = new THREE.Mesh(rotateMarkGeo, rotateMarkMat);
+
+	slideBarsGroup.add(rotateMark);
+	rotateBar.add(rotateMark);
 }
