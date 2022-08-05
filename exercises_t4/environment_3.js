@@ -66,6 +66,28 @@ var rectile = new THREE.Mesh(ringGeo, ringMat);
 
 controller1.add(rectile);
 
+//-- Slide bars ----------------------------------------------------------------------------------
+
+var scaleBarGeo = new THREE.PlaneGeometry(0.075, 1.5);
+var scaleBarMat = new THREE.MeshBasicMaterial({
+	color: "rgb(255, 0, 0)",
+	opacity: 0.9,
+	transparent: true});
+var scaleBar = new THREE.Mesh(scaleBarGeo, scaleBarMat);
+	scaleBar.position.set(-1.25, 1, -2);
+
+scene.add(scaleBar);
+
+var rotateBarGeo = new THREE.PlaneGeometry(1.5, 0.075);
+var rotateBarMat = new THREE.MeshBasicMaterial({
+	color: "rgb(255, 0, 0)",
+	opacity: 0.9,
+	transparent: true});
+var rotateBar = new THREE.Mesh(rotateBarGeo, rotateBarMat);
+	rotateBar.position.set(0, -0.25, -2);
+
+scene.add(rotateBar);
+
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 
 createScene();
@@ -128,7 +150,7 @@ function fixPosition(obj)
   		obj.translateY(-box.min.y);
   	else
   		obj.translateY(-1*box.min.y);
-		
+
 	return obj;
 }
 
@@ -230,7 +252,7 @@ function createScene()
 	const base = new THREE.Mesh(baseGeometry, baseMaterial);
 		base.rotation.y = -Math.PI/2;
 		base.position.y = -2
-		base.position.z = -6
+		base.position.z = -7
 		base.receiveShadow = true;
 
 	scene.add(base);
