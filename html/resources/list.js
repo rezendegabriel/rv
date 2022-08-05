@@ -134,6 +134,7 @@ var list = {
 		"Exercises VR": {
 			"T4": {
 				"Environment 1": "html/t4_environment1Info",
+				"Environment 2": "html/t4_environment2Info",
 			},
 		},
 	},

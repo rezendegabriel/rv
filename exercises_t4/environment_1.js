@@ -56,8 +56,7 @@ document.body.appendChild(renderer.domElement);
 document.body.appendChild(VRButton.createButton(renderer));
 
 // To be used outside a VR environment (desktop, for example)
-let lookCamera = setLookNonVRBehavior(camera, renderer, "On desktop, press 'Q' or 'E' to change orientation.",
-														"Labelling functions are available only in VR mode.");
+let lookCamera = setLookNonVRBehavior(camera, renderer, "On desktop, press 'Q' or 'E' to change orientation.");
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 
