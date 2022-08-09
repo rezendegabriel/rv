@@ -194,15 +194,18 @@ function createTree(trunkTexture)
 
 	var leafageTrunkRadiusRate = getRandomArbitrary(5, 10);
 	var leafageTrunkHeightRate = getRandomArbitrary(2.5, 5);
-	var leafageGeometry = new THREE.ConeGeometry(leafageTrunkRadiusRate*(trunkHeight/trunkHeightRadiusRate),
-												 trunkHeight*leafageTrunkHeightRate,
-												 64);
-	var leafageMaterial = new THREE.MeshLambertMaterial({color: "rgb(0, 255, 0)"});
-	var leafage = new THREE.Mesh(leafageGeometry, leafageMaterial);
-		leafage.castShadow = true;
-		leafage.receiveShadow = true;
+	
+	for(let i = 1; i < 2; i+=0.25) {
+		var leafageGeometry = new THREE.ConeGeometry(leafageTrunkRadiusRate*(trunkHeight/trunkHeightRadiusRate)*((i+1.25)/i),
+													 trunkHeight*leafageTrunkHeightRate/i,
+													 64);
+		var leafageMaterial = new THREE.MeshLambertMaterial({color: 0x3A6332});
+		var leafage = new THREE.Mesh(leafageGeometry, leafageMaterial);
+			leafage.castShadow = true;
+			leafage.receiveShadow = true;
 
-	trunk.add(leafage);
+		trunk.add(leafage);
 
-	leafage.translateY(((trunkHeight*leafageTrunkHeightRate)+trunkHeight)/2);
+		leafage.translateY(((trunkHeight*leafageTrunkHeightRate*i)+trunkHeight)/2);
+	}
 }
