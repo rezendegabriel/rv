@@ -139,6 +139,8 @@ var list = {
 			},
 			"T5": {
 				"Environment 4": "html/t5_environment4Info",
+				"Environment 5": "html/t5_environment5Info",
+				"Environment 6": "html/t5_environment6Info",
 			},
 		},
 	},

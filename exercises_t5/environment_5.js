@@ -2,8 +2,7 @@
 
 import * as THREE from  "three";
 import {VRButton} from "../build/jsm/webxr/VRButton.js";
-import {createGroundPlane,
-		degreesToRadians,
+import {degreesToRadians,
 		onWindowResize
 		} from "../libs/util/util.js";
 import {setFlyNonVRBehavior} from "../libs/util/utilVR.js";
@@ -19,7 +18,7 @@ window.addEventListener("resize", onWindowResize);
 //-- Renderer settings ---------------------------------------------------------------------------
 
 let renderer = new THREE.WebGLRenderer();
-	renderer.setClearColor(new THREE.Color("rgb(70, 150, 240)"));
+	renderer.setClearColor(new THREE.Color("rgb(80, 80, 80)"));
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.xr.enabled = true;
@@ -31,7 +30,7 @@ let renderer = new THREE.WebGLRenderer();
 let scene = new THREE.Scene();
 let clock = new THREE.Clock();
 
-let camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
+let camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 500);
 let moveCamera; // Move when a button is pressed 
 
 // To be used outside a VR environment (Desktop, for example)
@@ -39,26 +38,54 @@ let flyCamera = setFlyNonVRBehavior(camera, renderer, "On desktop, use mouse and
 
 // 'Camera Holder' to help moving the camera
 let cameraHolder = new THREE.Object3D();
-	cameraHolder.position.set(0, -4, 0);
+	//cameraHolder.position.set(0, 72.5, 125);
+	cameraHolder.position.set(0, 0, 30);
 	cameraHolder.add(camera);
 
 scene.add(cameraHolder);
 
-//-- Creating the cube map -----------------------------------------------------------------------
+// Show axes (parameter is size of each axis)
+let axesHelper = new THREE.AxesHelper(120);
+scene.add(axesHelper);
 
-const path = "../assets/textures/cube/Meadow/";
-const format = ".jpg";
-const urls = [
-	path + "posx" + format, path + "negx" + format,
-	path + "posy" + format, path + "negy" + format,
-	path + "posz" + format, path + "negz" + format
+//-- Creating rooms -----------------------------------------------------------------------
+
+const roomAGeometry = new THREE.BoxGeometry(60, 30, 60);
+const roomAMaterials = [
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
 ];
+const roomA = new THREE.Mesh(roomAGeometry, roomAMaterials);
+	for(let i = 0; i < roomAMaterials.length; i++) {
+		roomA.material[i].map.wrapS = THREE.RepeatWrapping;
+		roomA.material[i].map.wrapT = THREE.RepeatWrapping; 
+		roomA.material[i].map.repeat.set(2, 1);
+	}
 
-// Setting the two cube maps, one for refraction and one for reflection
-let cubeMapTexture = new THREE.CubeTextureLoader().load(urls);
+scene.add(roomA);
 
-// Create the main scene and Set its background as a cubemap (using a CubeTexture)
-scene.background = cubeMapTexture;
+const roomBGeometry = new THREE.BoxGeometry(60, 30, 60);
+const roomBMaterials = [
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}),
+];
+const roomB = new THREE.Mesh(roomBGeometry, roomBMaterials);
+	for(let i = 0; i < roomBMaterials.length; i++) {
+		roomB.material[i].map.wrapS = THREE.RepeatWrapping;
+		roomB.material[i].map.wrapT = THREE.RepeatWrapping; 
+		roomB.material[i].map.repeat.set(2, 1);
+	}
+	roomB.position.set(60+1.5, 0, 0);
+
+scene.add(roomB);
 
 //-- Create VR button and settings ---------------------------------------------------------------
 
@@ -94,7 +121,7 @@ function move()
 		// Move the camera Holder to the computed direction
 		cameraHolder.translateX(moveTo.x);
 		cameraHolder.translateY(moveTo.y);
-		cameraHolder.translateZ(moveTo.z);	
+		cameraHolder.translateZ(moveTo.z);
 	}
 }
 
@@ -136,7 +163,7 @@ function createScene()
 {
 	// Light stuff 
 	const light = new THREE.PointLight(0xaaaaaa);
-		light.position.set(0, 100, 0);
+		light.position.set(0, 30, 0);
 		light.castShadow = true;
 		light.distance = 0;
 		light.decay = 2;
@@ -151,61 +178,4 @@ function createScene()
 
 	// Load textures 
 	var textureLoader = new THREE.TextureLoader();
-	var groundPlaneTexture = textureLoader.load("../assets/textures/grass.jpg");
-	var trunkTexture = textureLoader.load("../assets/textures/wood.png");
-
-	// Create Ground Plane
-	var groundPlane = createGroundPlane(500, 500, 50, 50, "rgb(200, 200, 150)");
-		groundPlane.rotateX(degreesToRadians(-90));
-		groundPlane.translateZ(-5);
-		groundPlane.material.map = groundPlaneTexture;
-		groundPlane.material.map.wrapS = THREE.RepeatWrapping;
-		groundPlane.material.map.wrapT = THREE.RepeatWrapping;
-		groundPlane.material.map.repeat.set(50, 50);
-	
-	scene.add(groundPlane);
-
-	// Create trees
-	for(let i = 0; i < 50; i++) {
-		createTree(trunkTexture);
-	}		
-}
-
-function getRandomArbitrary(min, max) {
-	return Math.random() * (max - min) + min;
-  }
-
-function createTree(trunkTexture)
-{
-	var trunkHeight = getRandomArbitrary(2, 4);
-	var trunkHeightRadiusRate = getRandomArbitrary(10, 20);
-	var trunkGeometry =  new THREE.CylinderGeometry(trunkHeight/trunkHeightRadiusRate,
-												    trunkHeight/trunkHeightRadiusRate,
-													trunkHeight,
-													64);
-	var trunkMaterial = new THREE.MeshLambertMaterial();
-	var trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-		trunk.position.set(getRandomArbitrary(-250, 250), -5+trunkHeight/2, getRandomArbitrary(-250, 250));
-		trunk.material.map = trunkTexture;
-		trunk.castShadow = true;
-		trunk.receiveShadow = true;
-	
-	scene.add(trunk);
-
-	var leafageTrunkRadiusRate = getRandomArbitrary(5, 10);
-	var leafageTrunkHeightRate = getRandomArbitrary(2.5, 5);
-	
-	for(let i = 1; i < 2; i+=0.25) {
-		var leafageGeometry = new THREE.ConeGeometry(leafageTrunkRadiusRate*(trunkHeight/trunkHeightRadiusRate)*((i+1.25)/i),
-													 trunkHeight*leafageTrunkHeightRate/i,
-													 64);
-		var leafageMaterial = new THREE.MeshLambertMaterial({color: 0x3A6332});
-		var leafage = new THREE.Mesh(leafageGeometry, leafageMaterial);
-			leafage.castShadow = true;
-			leafage.receiveShadow = true;
-
-		trunk.add(leafage);
-
-		leafage.translateY(((trunkHeight*leafageTrunkHeightRate*i)+trunkHeight)/2);
-	}
 }
