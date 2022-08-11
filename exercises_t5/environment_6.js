@@ -38,7 +38,7 @@ let flyCamera = setFlyNonVRBehavior(camera, renderer, "On desktop, use mouse and
 // 'Camera Holder' to help moving the camera
 let cameraHolder = new THREE.Object3D();
 	//cameraHolder.position.set(0, 72.5, 125);
-	cameraHolder.position.set(0, 0, 30);
+	cameraHolder.position.set(0, 17, 0);
 	cameraHolder.add(camera);
 
 scene.add(cameraHolder);
