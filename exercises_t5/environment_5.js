@@ -12,6 +12,10 @@ import {setFlyNonVRBehavior} from "../libs/util/utilVR.js";
 
 //-- General globals -----------------------------------------------------------------------------
 
+let intersections;
+var raycaster = new THREE.Raycaster();
+var floorGroup = new THREE.Group();
+
 window.addEventListener("resize", onWindowResize);
 
 //-- Renderer settings ---------------------------------------------------------------------------
@@ -30,14 +34,14 @@ let scene = new THREE.Scene();
 let clock = new THREE.Clock();
 
 let camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 500);
-let moveCamera; // Move when a button is pressed 
 
 // To be used outside a VR environment (Desktop, for example)
-let flyCamera = setFlyNonVRBehavior(camera, renderer, "On desktop, use mouse and WASD-QE to navigate.");
+let flyCamera = setFlyNonVRBehavior(camera, renderer, "On desktop, use mouse and WASD-QE to navigate.",
+													  "Teleport available only in VR mode.");
 
 // 'Camera Holder' to help moving the camera
 let cameraHolder = new THREE.Object3D();
-	//eeecameraHolder.position.set(-30, 72.5, 125);
+	//cameraHolder.position.set(-30, 72.5, 125);
 	cameraHolder.position.set(0, 17, 0);
 	cameraHolder.add(camera);
 
@@ -79,7 +83,7 @@ const floorRoomA = new THREE.Mesh(roomGeometry[2], roomAMaterials[2]);
 	floorRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	floorRoomA.material.map.repeat.set(2, 1);
 
-scene.add(floorRoomA);
+floorGroup.add(floorRoomA);
 
 const roofRoomA = new THREE.Mesh(roomGeometry[3], roomAMaterials[3]);
 	roofRoomA.position.set(0, 30, 0);
@@ -161,7 +165,7 @@ const floorRoomB = new THREE.Mesh(roomGeometry[2], roomBMaterials[2]);
 	floorRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	floorRoomB.material.map.repeat.set(2, 1);
 
-scene.add(floorRoomB);
+floorGroup.add(floorRoomB);
 
 const roofRoomB = new THREE.Mesh(roomGeometry[3], roomBMaterials[3]);
 	roofRoomB.position.set(60+1.5, 30, 0);
@@ -248,7 +252,7 @@ const floorDoor = new THREE.Mesh(doorGeometry[1], doorMaterials[1]);
 	floorDoor.material.map.wrapT = THREE.RepeatWrapping; 
 	floorDoor.material.map.repeat.set(2, 1);
 
-scene.add(floorDoor);
+floorGroup.add(floorDoor);
 
 const roofDoor = new THREE.Mesh(doorGeometry[2], doorMaterials[2]);
 	roofDoor.position.set(30+0.75, 25, 0);
@@ -276,6 +280,8 @@ const backDoor = new THREE.Mesh(doorGeometry[3], doorMaterials[3]);
 
 scene.add(backDoor);
 
+scene.add(floorGroup);
+
 //-- Create VR button and settings ---------------------------------------------------------------
 
 document.body.appendChild(renderer.domElement);
@@ -285,7 +291,20 @@ document.body.appendChild(VRButton.createButton(renderer));
 var controller1 = renderer.xr.getController(0);
 	controller1.addEventListener("selectstart", onSelectStart);
 	controller1.addEventListener("selectend", onSelectEnd);
-camera.add(controller1);
+
+cameraHolder.add(controller1);
+
+//-- VR Camera Rectile ---------------------------------------------------------------------------
+
+const teleportMark = new THREE.CylinderGeometry(1, 1, 0.05, 32);
+
+const matNotIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 255, 255)"});
+const matIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 100, 25)"});
+const rectile = new THREE.Mesh(teleportMark, matNotIntersected);
+	rectile.position.set(0, -17, -22.5);
+	rectile.visible = false;
+
+controller1.add(rectile);
 
 //-- Creating Scene and calling the main loop ----------------------------------------------------
 
@@ -296,32 +315,48 @@ animate();
 //------------------------------------------- FUNCTIONS ------------------------------------------
 //------------------------------------------------------------------------------------------------
 
-function move()
+//-- Teleport functions --------------------------------------------------------------------------
+
+function getIntersections(controller)
 {
-	if(moveCamera) {
-		// Get Camera Rotation
-		let quaternion = new THREE.Quaternion();
-		quaternion = camera.quaternion;
+	let tempMatrix = new THREE.Matrix4();
+		tempMatrix.identity().extractRotation(controller.matrixWorld);
 
-		// Get direction to translate from quaternion
-		var moveTo = new THREE.Vector3(0, 0, -0.1);
-		moveTo.applyQuaternion(quaternion);
+	raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
+	raycaster.ray.direction.set(0, 0, -1).applyMatrix4(tempMatrix);
 
-		// Move the camera Holder to the computed direction
-		cameraHolder.translateX(moveTo.x);
-		cameraHolder.translateY(moveTo.y);
-		cameraHolder.translateZ(moveTo.z);
+	return raycaster.intersectObjects(scene.children);
+}
+
+function onSelectStart() {
+	rectile.visible = true;
+}
+
+function checkIntersection(controller) 
+{
+	if (rectile.visible) {
+		const intersections = getIntersections(controller);
+
+		if(intersections.length > 0)
+			rectile.material = matIntersected;		
+		else
+			rectile.material = matNotIntersected;		
 	}
 }
 
-function onSelectStart() 
-{
-	moveCamera = true;
-}
+function onSelectEnd(event) {
+	const controller = event.target;
+	
+	intersections = getIntersections(controller);
+	
+	if(intersections.length > 0) {
+		const intersection = intersections[0];
+		
+		// Effectivelly move the camera to the desired position
+		cameraHolder.position.set(intersection.point.x, 17, intersection.point.z);
+	}
 
-function onSelectEnd() 
-{
-	moveCamera = false;
+	rectile.visible = false;
 }
 
 //-- Main loop -----------------------------------------------------------------------------------
@@ -335,11 +370,11 @@ function render()
 {
 	// Controls if VR Mode is ON
 	if(renderer.xr.isPresenting)
-		move();
+		checkIntersection(controller1);
    	else
       flyCamera.update(clock.getDelta());  
 	
-	renderer.render( scene, camera );
+	renderer.render(scene, camera);
 }
 
 //------------------------------------------------------------------------------------------------
