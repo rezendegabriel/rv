@@ -302,7 +302,7 @@ const matNotIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 255, 255
 const matIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 100, 25)"});
 const rectile = new THREE.Mesh(teleportMark, matNotIntersected);
 	rectile.position.set(0, -17, -22.5);
-	rectile.visible = false;
+	rectile.visible = true;
 
 controller1.add(rectile);
 
