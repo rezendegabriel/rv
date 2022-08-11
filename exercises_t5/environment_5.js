@@ -296,13 +296,13 @@ cameraHolder.add(controller1);
 
 //-- VR Camera Rectile ---------------------------------------------------------------------------
 
-const teleportMark = new THREE.CylinderGeometry(1, 1, 0.05, 32);
+const teleportMark = new THREE.CircleGeometry(0.1, 32);
 
 const matNotIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 255, 255)"});
 const matIntersected = new THREE.MeshBasicMaterial({color: "rgb(255, 100, 25)"});
 const rectile = new THREE.Mesh(teleportMark, matNotIntersected);
-	rectile.position.set(0, -17, -22.5);
-	rectile.visible = true;
+	rectile.position.set(0, 0, -2.5);
+	rectile.visible = false;
 
 controller1.add(rectile);
 
