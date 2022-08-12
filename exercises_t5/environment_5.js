@@ -1,8 +1,11 @@
 //-- Imports -------------------------------------------------------------------------------------
 
 import * as THREE from  "three";
+import {OBJLoader} from "../build/jsm/loaders/OBJLoader.js";
+import {MTLLoader} from "../build/jsm/loaders/MTLLoader.js";
 import {VRButton} from "../build/jsm/webxr/VRButton.js";
 import {degreesToRadians,
+		getMaxSize,
 		onWindowResize} from "../libs/util/util.js";
 import {setFlyNonVRBehavior} from "../libs/util/utilVR.js";
 
@@ -69,34 +72,37 @@ const roomGeometry = [
 //-- Room A --------------------------------------------------------------------------------------
 
 const roomAMaterials = [
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Front
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Left
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.BackSide}), // Floor
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.BackSide}), // Roof
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Back
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Right
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Front
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Left
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/marble_1.jpg"), side: THREE.BackSide}), // Floor
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/marble.png"), side: THREE.BackSide}), // Roof
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Back
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Right
 ];
 
 const floorRoomA = new THREE.Mesh(roomGeometry[2], roomAMaterials[2]);
 	floorRoomA.rotateX(degreesToRadians(90));
+	floorRoomA.receiveShadow = true;
 	floorRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	floorRoomA.material.map.wrapT = THREE.RepeatWrapping; 
-	floorRoomA.material.map.repeat.set(2, 1);
+	floorRoomA.material.map.repeat.set(1, 1);
 
 floorGroup.add(floorRoomA);
 
 const roofRoomA = new THREE.Mesh(roomGeometry[3], roomAMaterials[3]);
 	roofRoomA.position.set(0, 30, 0);
 	roofRoomA.rotateX(degreesToRadians(-90));
+	roofRoomA.receiveShadow = true;
 	roofRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	roofRoomA.material.map.wrapT = THREE.RepeatWrapping; 
-	roofRoomA.material.map.repeat.set(2, 1);
+	roofRoomA.material.map.repeat.set(4, 4);
 
 scene.add(roofRoomA);
 
 const frontRoomA = new THREE.Mesh(roomGeometry[0], roomAMaterials[0]);
 	frontRoomA.position.set(0, 15, -30);
 	frontRoomA.rotateY(degreesToRadians(180));
+	frontRoomA.receiveShadow = true;
 	frontRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	frontRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	frontRoomA.material.map.repeat.set(2, 1);
@@ -106,6 +112,7 @@ scene.add(frontRoomA);
 const leftRoomA = new THREE.Mesh(roomGeometry[1], roomAMaterials[1]);
 	leftRoomA.position.set(-30, 15, 0);
 	leftRoomA.rotateY(degreesToRadians(-90));
+	leftRoomA.receiveShadow = true;
 	leftRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	leftRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	leftRoomA.material.map.repeat.set(2, 1);
@@ -114,6 +121,7 @@ scene.add(leftRoomA);
 
 const backRoomA = new THREE.Mesh(roomGeometry[4], roomAMaterials[4]);
 	backRoomA.position.set(0, 15, 30);
+	backRoomA.receiveShadow = true;
 	backRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	backRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	backRoomA.material.map.repeat.set(2, 1);
@@ -123,6 +131,7 @@ scene.add(backRoomA);
 const rightA1RoomA = new THREE.Mesh(roomGeometry[6], roomAMaterials[5]);
 	rightA1RoomA.position.set(30, 15, -20);
 	rightA1RoomA.rotateY(degreesToRadians(90));
+	rightA1RoomA.receiveShadow = true;
 	rightA1RoomA.material.map.wrapS = THREE.RepeatWrapping;
 	rightA1RoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	rightA1RoomA.material.map.repeat.set(1, 1);
@@ -132,6 +141,7 @@ scene.add(rightA1RoomA);
 const rightA2RoomA = new THREE.Mesh(roomGeometry[6], roomAMaterials[5]);
 	rightA2RoomA.position.set(30, 15, 20);
 	rightA2RoomA.rotateY(degreesToRadians(90));
+	rightA2RoomA.receiveShadow = true;
 	rightA2RoomA.material.map.wrapS = THREE.RepeatWrapping;
 	rightA2RoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	rightA2RoomA.material.map.repeat.set(1, 1);
@@ -141,6 +151,7 @@ scene.add(rightA2RoomA);
 const rightBRoomA = new THREE.Mesh(roomGeometry[7], roomAMaterials[5]);
 	rightBRoomA.position.set(30, 27.5, 0);
 	rightBRoomA.rotateY(degreesToRadians(90));
+	rightBRoomA.receiveShadow = true;
 	rightBRoomA.material.map.wrapS = THREE.RepeatWrapping;
 	rightBRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	rightBRoomA.material.map.repeat.set(4, 1);
@@ -150,12 +161,12 @@ scene.add(rightBRoomA);
 //-- Room B --------------------------------------------------------------------------------------
 
 const roomBMaterials = [
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Front
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Left
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.BackSide}), // Floor
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.BackSide}), // Roof
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Back
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.BackSide}), // Right
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Front
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Left
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/wood_floor_2.jpg"), side: THREE.BackSide}), // Floor
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/marble_4.jpg"), side: THREE.BackSide}), // Roof
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Back
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.BackSide}), // Right
 ];
 
 const floorRoomB = new THREE.Mesh(roomGeometry[2], roomBMaterials[2]);
@@ -163,7 +174,7 @@ const floorRoomB = new THREE.Mesh(roomGeometry[2], roomBMaterials[2]);
 	floorRoomB.rotateX(degreesToRadians(90));
 	floorRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	floorRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	floorRoomB.material.map.repeat.set(2, 1);
+	floorRoomB.material.map.repeat.set(1, 4);
 
 floorGroup.add(floorRoomB);
 
@@ -172,7 +183,7 @@ const roofRoomB = new THREE.Mesh(roomGeometry[3], roomBMaterials[3]);
 	roofRoomB.rotateX(degreesToRadians(-90));
 	roofRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	roofRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	roofRoomB.material.map.repeat.set(2, 1);
+	roofRoomB.material.map.repeat.set(1, 1);
 
 scene.add(roofRoomB);
 
@@ -181,7 +192,7 @@ const frontRoomB = new THREE.Mesh(roomGeometry[0], roomBMaterials[0]);
 	frontRoomB.rotateY(degreesToRadians(180));
 	frontRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	frontRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	frontRoomB.material.map.repeat.set(2, 1);
+	frontRoomB.material.map.repeat.set(1, 1);
 
 scene.add(frontRoomB);
 
@@ -189,7 +200,7 @@ const backRoomB = new THREE.Mesh(roomGeometry[4], roomBMaterials[4]);
 	backRoomB.position.set(60+1.5, 15, 30);
 	backRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	backRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	backRoomB.material.map.repeat.set(2, 1);
+	backRoomB.material.map.repeat.set(1, 1);
 
 scene.add(backRoomB);
 
@@ -198,7 +209,7 @@ const rightRoomB = new THREE.Mesh(roomGeometry[5], roomBMaterials[5]);
 	rightRoomB.rotateY(degreesToRadians(90));
 	rightRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	rightRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	rightRoomB.material.map.repeat.set(2, 1);
+	rightRoomB.material.map.repeat.set(1, 1);
 
 scene.add(rightRoomB);
 
@@ -225,7 +236,7 @@ const leftBRoomB = new THREE.Mesh(roomGeometry[7], roomAMaterials[5]);
 	leftBRoomB.rotateY(degreesToRadians(-90));
 	leftBRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	leftBRoomB.material.map.wrapT = THREE.RepeatWrapping; 
-	leftBRoomB.material.map.repeat.set(4, 1);
+	leftBRoomB.material.map.repeat.set(1, 1);
 
 scene.add(leftBRoomB);
 
@@ -239,10 +250,10 @@ const doorGeometry = [
 ];
 
 const doorMaterials = [
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}), // Front
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}), // Floor
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/darkcement.jpg"), side: THREE.DoubleSide}), // Roof
-	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/cement.jpg"), side: THREE.DoubleSide}), // Back
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.DoubleSide}), // Front
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/marble_3.jpg"), side: THREE.DoubleSide}), // Floor
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.DoubleSide}), // Roof
+	new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/concrete_1.jpg"), side: THREE.DoubleSide}), // Back
 ];
 
 const floorDoor = new THREE.Mesh(doorGeometry[1], doorMaterials[1]);
@@ -250,7 +261,7 @@ const floorDoor = new THREE.Mesh(doorGeometry[1], doorMaterials[1]);
 	floorDoor.rotateX(degreesToRadians(90));
 	floorDoor.material.map.wrapS = THREE.RepeatWrapping;
 	floorDoor.material.map.wrapT = THREE.RepeatWrapping; 
-	floorDoor.material.map.repeat.set(2, 1);
+	floorDoor.material.map.repeat.set(0.5, 6);
 
 floorGroup.add(floorDoor);
 
@@ -259,7 +270,7 @@ const roofDoor = new THREE.Mesh(doorGeometry[2], doorMaterials[2]);
 	roofDoor.rotateX(degreesToRadians(-90));
 	roofDoor.material.map.wrapS = THREE.RepeatWrapping;
 	roofDoor.material.map.wrapT = THREE.RepeatWrapping; 
-	roofDoor.material.map.repeat.set(2, 1);
+	roofDoor.material.map.repeat.set(0.5, 6);
 
 scene.add(roofDoor);
 
@@ -268,7 +279,7 @@ const frontDoor = new THREE.Mesh(doorGeometry[0], doorMaterials[0]);
 	frontDoor.rotateY(degreesToRadians(180));
 	frontDoor.material.map.wrapS = THREE.RepeatWrapping;
 	frontDoor.material.map.wrapT = THREE.RepeatWrapping; 
-	frontDoor.material.map.repeat.set(2, 1);
+	frontDoor.material.map.repeat.set(0.5, 6);
 
 scene.add(frontDoor);
 
@@ -276,7 +287,7 @@ const backDoor = new THREE.Mesh(doorGeometry[3], doorMaterials[3]);
 	backDoor.position.set(30+0.75, 12.5, 10);
 	backDoor.material.map.wrapS = THREE.RepeatWrapping;
 	backDoor.material.map.wrapT = THREE.RepeatWrapping; 
-	backDoor.material.map.repeat.set(2, 1);
+	backDoor.material.map.repeat.set(0.5, 6);
 
 scene.add(backDoor);
 
@@ -359,6 +370,67 @@ function onSelectEnd(event) {
 	rectile.visible = false;
 }
 
+//-- External objects functions --------------------------------------------------------------------------
+
+function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility)
+{
+	var mtlLoader = new MTLLoader();
+  		mtlLoader.setPath(modelPath);
+  		mtlLoader.load(modelName + ".mtl", function(materials) {
+      		materials.preload();
+
+			var objLoader = new OBJLoader();
+				objLoader.setMaterials(materials);
+				objLoader.setPath(modelPath);
+				objLoader.load(modelName + ".obj", function(obj) {
+					obj.visible = visibility;
+					obj.name = modelName;
+
+					// Set "castShadow" and "receiveShadow" property for each children of the group
+					obj.traverse(function(child) {
+						child.castShadow = true;
+						child.receiveShadow = true;
+					});
+
+					obj.traverse(function(node) {
+						if(node.material) node.material.side = THREE.DoubleSide;
+					});
+
+					var obj = normalizeAndRescale(obj, desiredScale);
+					
+					var obj = fixPosition(obj);
+					
+					obj.position.x = 60+1.5;
+					obj.rotateY(degreesToRadians(angle));
+					scene.add(obj);
+				});
+  		});
+}
+
+// Normalize scale and multiple by the newScale
+function normalizeAndRescale(obj, newScale)
+{
+	var scale = getMaxSize(obj); // Available in 'utils.js'
+  		obj.scale.set(newScale*(1.0/scale),
+                  	  newScale*(1.0/scale),
+                  	  newScale*(1.0/scale));
+	
+	return obj;
+}
+
+function fixPosition(obj)
+{
+  	// Fix position of the object over the ground plane
+  	var box = new THREE.Box3().setFromObject(obj);
+  
+  	if(box.min.y > 0)
+  		obj.translateY(-box.min.y);
+  	else
+  		obj.translateY(-1*box.min.y);
+  
+	return obj;
+}
+
 //-- Main loop -----------------------------------------------------------------------------------
 
 function animate() 
@@ -400,6 +472,72 @@ function createScene()
 	
 	scene.add(ambientLight);
 
-	// Load textures 
-	var textureLoader = new THREE.TextureLoader();
+	// Pictures
+	const picturesMonetGeometry = [
+		new THREE.BoxGeometry(8.2, 10, 0.2), // Monet - Mulher com sombrinha (1)
+		new THREE.BoxGeometry(7.4, 9.3, 0.2), // Monet - A Lagoa de lirios d'água (2)
+		new THREE.BoxGeometry(20.5, 25.5, 0.2), // Monet - Femmes au jardim (3)
+		new THREE.BoxGeometry(6.3, 4.8, 0.2), // Monet - Impressão, nascer do sol (4)
+		new THREE.BoxGeometry(9.97, 7.5, 0.2), // Monnet - Banhistas na Grenouillere (5)
+		new THREE.BoxGeometry(24.8, 21.7, 0.2), // Monnet - Almoço na Relva (6)
+	];
+
+	const picturesMonetMaterials = [
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_mulher_sombrinha.jpg"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_lagoa-lirios.jpg"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_femmes-jardim.jpg"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_impressao-nascer-sol.jpg"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_grenouillere.jpg"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../assets/textures/monet_almoco-reiva.jpg"), side: THREE.BackSide}),
+	];
+
+	const monet1 = new THREE.Mesh(picturesMonetGeometry[0], picturesMonetMaterials[0]);
+		monet1.position.set(30-0.6, 10+8.5, -20);
+		monet1.rotateY(degreesToRadians(90));
+		monet1.rotateX(degreesToRadians(-5));
+		monet1.receiveShadow = true;
+
+	scene.add(monet1);
+
+	const monet2 = new THREE.Mesh(picturesMonetGeometry[1], picturesMonetMaterials[1]);
+		monet2.position.set(30-0.6, 9.3+8.5, 20);
+		monet2.rotateY(degreesToRadians(90));
+		monet2.rotateX(degreesToRadians(-5));
+		monet2.receiveShadow = true;
+
+	scene.add(monet2);
+
+	const monet3 = new THREE.Mesh(picturesMonetGeometry[2], picturesMonetMaterials[2]);
+		monet3.position.set(0, 6.125+8.5, -30+1.4);
+		monet3.rotateY(degreesToRadians(180));
+		monet3.rotateX(degreesToRadians(-5));
+		monet3.receiveShadow = true;
+
+	scene.add(monet3);
+
+	const monet4 = new THREE.Mesh(picturesMonetGeometry[3], picturesMonetMaterials[3]);
+		monet4.position.set(0, 9.6+8.5, 30-0.4);
+		monet4.rotateX(degreesToRadians(-5));
+		monet4.receiveShadow = true;
+
+	scene.add(monet4);
+
+	const monet5 = new THREE.Mesh(picturesMonetGeometry[4], picturesMonetMaterials[4]);
+		monet5.position.set(-30+0.6, 7.5+8.5, 15);
+		monet5.rotateY(degreesToRadians(-90));
+		monet5.rotateX(degreesToRadians(-5));
+		monet5.receiveShadow = true;
+
+	scene.add(monet5);
+
+	const monet6 = new THREE.Mesh(picturesMonetGeometry[5], picturesMonetMaterials[5]);
+		monet6.position.set(-30+1.2, 8.1+8.5, -15);
+		monet6.rotateY(degreesToRadians(-90));
+		monet6.rotateX(degreesToRadians(-5));
+		monet6.receiveShadow = true;
+
+	scene.add(monet6);
+
+	// Sculptures
+	loadOBJFile("../assets/objects/", "stanfords_lucy_angel", 20, -120, true);
 }
