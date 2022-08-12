@@ -17,7 +17,6 @@ import {setFlyNonVRBehavior} from "../libs/util/utilVR.js";
 
 let intersections;
 var raycaster = new THREE.Raycaster();
-var floorGroup = new THREE.Group();
 
 window.addEventListener("resize", onWindowResize);
 
@@ -52,6 +51,7 @@ scene.add(cameraHolder);
 
 // Show axes (parameter is size of each axis)
 let axesHelper = new THREE.AxesHelper(120);
+
 scene.add(axesHelper);
 
 //------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ const floorRoomA = new THREE.Mesh(roomGeometry[2], roomAMaterials[2]);
 	floorRoomA.material.map.wrapT = THREE.RepeatWrapping; 
 	floorRoomA.material.map.repeat.set(1, 1);
 
-floorGroup.add(floorRoomA);
+scene.add(floorRoomA);
 
 const roofRoomA = new THREE.Mesh(roomGeometry[3], roomAMaterials[3]);
 	roofRoomA.position.set(0, 30, 0);
@@ -172,15 +172,17 @@ const roomBMaterials = [
 const floorRoomB = new THREE.Mesh(roomGeometry[2], roomBMaterials[2]);
 	floorRoomB.position.set(60+1.5, 0, 0);
 	floorRoomB.rotateX(degreesToRadians(90));
+	floorRoomB.receiveShadow = true;
 	floorRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	floorRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	floorRoomB.material.map.repeat.set(1, 4);
 
-floorGroup.add(floorRoomB);
+scene.add(floorRoomB);
 
 const roofRoomB = new THREE.Mesh(roomGeometry[3], roomBMaterials[3]);
 	roofRoomB.position.set(60+1.5, 30, 0);
 	roofRoomB.rotateX(degreesToRadians(-90));
+	roofRoomB.receiveShadow = true;
 	roofRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	roofRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	roofRoomB.material.map.repeat.set(1, 1);
@@ -190,6 +192,7 @@ scene.add(roofRoomB);
 const frontRoomB = new THREE.Mesh(roomGeometry[0], roomBMaterials[0]);
 	frontRoomB.position.set(60+1.5, 15, -30);
 	frontRoomB.rotateY(degreesToRadians(180));
+	frontRoomB.receiveShadow = true;
 	frontRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	frontRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	frontRoomB.material.map.repeat.set(1, 1);
@@ -198,6 +201,7 @@ scene.add(frontRoomB);
 
 const backRoomB = new THREE.Mesh(roomGeometry[4], roomBMaterials[4]);
 	backRoomB.position.set(60+1.5, 15, 30);
+	backRoomB.receiveShadow = true;
 	backRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	backRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	backRoomB.material.map.repeat.set(1, 1);
@@ -207,6 +211,7 @@ scene.add(backRoomB);
 const rightRoomB = new THREE.Mesh(roomGeometry[5], roomBMaterials[5]);
 	rightRoomB.position.set(30+60+1.5, 15, 0);
 	rightRoomB.rotateY(degreesToRadians(90));
+	rightRoomB.receiveShadow = true;
 	rightRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	rightRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	rightRoomB.material.map.repeat.set(1, 1);
@@ -216,6 +221,7 @@ scene.add(rightRoomB);
 const leftA1RoomB = new THREE.Mesh(roomGeometry[6], roomAMaterials[5]);
 	leftA1RoomB.position.set(30+1.5, 15, -20);
 	leftA1RoomB.rotateY(degreesToRadians(-90));
+	leftA1RoomB.receiveShadow = true;
 	leftA1RoomB.material.map.wrapS = THREE.RepeatWrapping;
 	leftA1RoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	leftA1RoomB.material.map.repeat.set(1, 1);
@@ -225,6 +231,7 @@ scene.add(leftA1RoomB);
 const leftA2RoomB = new THREE.Mesh(roomGeometry[6], roomAMaterials[5]);
 	leftA2RoomB.position.set(30+1.5, 15, 20);
 	leftA2RoomB.rotateY(degreesToRadians(-90));
+	leftA2RoomB.receiveShadow = true;
 	leftA2RoomB.material.map.wrapS = THREE.RepeatWrapping;
 	leftA2RoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	leftA2RoomB.material.map.repeat.set(1, 1);
@@ -234,6 +241,7 @@ scene.add(leftA2RoomB);
 const leftBRoomB = new THREE.Mesh(roomGeometry[7], roomAMaterials[5]);
 	leftBRoomB.position.set(30+1.5, 27.5, 0);
 	leftBRoomB.rotateY(degreesToRadians(-90));
+	leftBRoomB.receiveShadow = true;
 	leftBRoomB.material.map.wrapS = THREE.RepeatWrapping;
 	leftBRoomB.material.map.wrapT = THREE.RepeatWrapping; 
 	leftBRoomB.material.map.repeat.set(1, 1);
@@ -259,15 +267,17 @@ const doorMaterials = [
 const floorDoor = new THREE.Mesh(doorGeometry[1], doorMaterials[1]);
 	floorDoor.position.set(30+0.75, 0, 0);
 	floorDoor.rotateX(degreesToRadians(90));
+	floorDoor.receiveShadow = true;
 	floorDoor.material.map.wrapS = THREE.RepeatWrapping;
 	floorDoor.material.map.wrapT = THREE.RepeatWrapping; 
 	floorDoor.material.map.repeat.set(0.5, 6);
 
-floorGroup.add(floorDoor);
+scene.add(floorDoor);
 
 const roofDoor = new THREE.Mesh(doorGeometry[2], doorMaterials[2]);
 	roofDoor.position.set(30+0.75, 25, 0);
 	roofDoor.rotateX(degreesToRadians(-90));
+	roofDoor.receiveShadow = true;
 	roofDoor.material.map.wrapS = THREE.RepeatWrapping;
 	roofDoor.material.map.wrapT = THREE.RepeatWrapping; 
 	roofDoor.material.map.repeat.set(0.5, 6);
@@ -277,6 +287,7 @@ scene.add(roofDoor);
 const frontDoor = new THREE.Mesh(doorGeometry[0], doorMaterials[0]);
 	frontDoor.position.set(30+0.75, 12.5, -10);
 	frontDoor.rotateY(degreesToRadians(180));
+	frontDoor.receiveShadow = true;
 	frontDoor.material.map.wrapS = THREE.RepeatWrapping;
 	frontDoor.material.map.wrapT = THREE.RepeatWrapping; 
 	frontDoor.material.map.repeat.set(0.5, 6);
@@ -285,13 +296,12 @@ scene.add(frontDoor);
 
 const backDoor = new THREE.Mesh(doorGeometry[3], doorMaterials[3]);
 	backDoor.position.set(30+0.75, 12.5, 10);
+	backDoor.receiveShadow = true;
 	backDoor.material.map.wrapS = THREE.RepeatWrapping;
 	backDoor.material.map.wrapT = THREE.RepeatWrapping; 
 	backDoor.material.map.repeat.set(0.5, 6);
 
 scene.add(backDoor);
-
-scene.add(floorGroup);
 
 //-- Create VR button and settings ---------------------------------------------------------------
 
@@ -402,7 +412,7 @@ function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility)
 					
 					obj.position.x = 60+1.5;
 					obj.rotateY(degreesToRadians(angle));
-					
+
 					scene.add(obj);
 				});
   		});
