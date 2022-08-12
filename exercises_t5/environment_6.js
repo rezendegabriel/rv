@@ -279,8 +279,6 @@ const backDoor = new THREE.Mesh(doorGeometry[3], doorMaterials[3]);
 
 scene.add(backDoor);
 
-scene.add(floorGroup);
-
 //-- Create VR button and settings ---------------------------------------------------------------
 
 document.body.appendChild(renderer.domElement);
@@ -361,6 +359,7 @@ function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility)
 					
 					obj.position.x = 60+1.5;
 					obj.rotateY(degreesToRadians(angle));
+
 					scene.add(obj);
 				});
   		});

@@ -402,6 +402,7 @@ function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility)
 					
 					obj.position.x = 60+1.5;
 					obj.rotateY(degreesToRadians(angle));
+					
 					scene.add(obj);
 				});
   		});
