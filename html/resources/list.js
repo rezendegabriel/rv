@@ -145,7 +145,7 @@ var list = {
 		},
 		"Final work": {
 			"Inverse Rendering": {
-				"Interface": "html/tf_interfaceInfo.html",
+				"Interface": "html/tf_interfaceInfo",
 			},
 		},
 	},
