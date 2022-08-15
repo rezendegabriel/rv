@@ -143,5 +143,8 @@ var list = {
 				"Environment 6": "html/t5_environment6Info",
 			},
 		},
+		"Final work": {
+			"Interface": "html/tf_interfaceInfo.html"
+		}
 	},
 };
