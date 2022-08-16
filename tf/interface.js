@@ -92,7 +92,15 @@ let markerControlsObj = new ARjs.MarkerControls(arToolkitContext, markerRoot, {
 //-- Button function -----------------------------------------------------------------------------
 
 function button() {
+	let img_data_url = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
 
+	//gui.add({showImage: function() { 
+	//	arToolkitContext.arController.canvas.drawImage(renderer.domElement.video, 0, 0,
+	//												   renderer.domElement.videoWidth,
+	//												   renderer.domElement.videoHeight);
+	//}}, "showImage").name("Image");
+	
+	console.log(img_data_url);
 }
 
 var params = {onClick: button}
