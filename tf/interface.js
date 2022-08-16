@@ -92,23 +92,29 @@ let markerControlsObj = new ARjs.MarkerControls(arToolkitContext, markerRoot, {
 //-- Button function -----------------------------------------------------------------------------
 
 function button() {
-	let img_data_url = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
+	if(button1Event)
+		gui.remove(text1);
 
-	//gui.add({showImage: function() { 
-	//	arToolkitContext.arController.canvas.drawImage(renderer.domElement.video, 0, 0,
-	//												   renderer.domElement.videoWidth,
-	//												   renderer.domElement.videoHeight);
-	//}}, "showImage").name("Image");
-	
-	console.log(img_data_url);
+	let imgDataURL = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
+	//console.image(imgDataURL);
+	var paramsText1 = {showImgDataURL: imgDataURL};
+	text1 = gui.add(paramsText1, "showImgDataURL").name("Image Data URL " + img_i);
+
+	img_i += 1;
+
+	button1Event = true;
 }
 
-var params = {onClick: button}
+var button1Event = false;
+var img_i = 1;
+var text1 = null;
+
+var paramsButton1 = {onClick: button}
 
 //-- GUI interface -------------------------------------------------------------------------------
 
 var gui = new GUI();
-	gui.add(params, "onClick").name("Capture frame");
+let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 
 //------------------------------------------------------------------------------------------------
 //------------------------------------------- Render ---------------------------------------------
