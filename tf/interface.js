@@ -89,27 +89,57 @@ let markerControlsObj = new ARjs.MarkerControls(arToolkitContext, markerRoot, {
 //------------------------------------------ Interface -------------------------------------------
 //------------------------------------------------------------------------------------------------
 
-//-- Button function -----------------------------------------------------------------------------
+//-- Send button function ------------------------------------------------------------------------
 
-function button() {
+function sendImg() {
+	const ws = new WebSocket("ws://127.0.0.1:1234/");
+		console.log(ws);
+
+	var x = imgDataURL;
+	
+	ws.onmessage = function(event) {
+		console.log("[Msg received from server] ", event.data)
+	};
+
+	try {
+		ws.onopen = () => ws.send(x);
+			console.log("[Msg sent] ", x);
+	} catch (error) {
+		console.log("[Msg not sent]", error);
+	}	
+}
+
+//-- Capture button function ---------------------------------------------------------------------
+
+function captureFrame() {
 	if(button1Event)
-		gui.remove(text1);
+		gui.removeFolder(text1Folder);
 
-	let imgDataURL = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
-	//console.image(imgDataURL);
-	var paramsText1 = {showImgDataURL: imgDataURL};
-	text1 = gui.add(paramsText1, "showImgDataURL").name("Image Data URL " + img_i);
-
+	text1Folder = gui.addFolder("Image Data URL " + img_i);
 	img_i += 1;
+
+	imgDataURL = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
+		//console.image(imgDataURL);
+	
+	var paramsText1 = {showImgDataURL: imgDataURL};
+	text1 = text1Folder.add(paramsText1, "showImgDataURL").name("");
+
+	var paramsButton2 = {onClick: sendImg};
+	button2 = text1Folder.add(paramsButton2, "onClick").name("Send Image");
 
 	button1Event = true;
 }
 
-var button1Event = false;
+var imgDataURL = null;
 var img_i = 1;
-var text1 = null;
 
-var paramsButton1 = {onClick: button}
+var text1Folder = null;
+var text1 = null;
+var button2 = null;
+
+var button1Event = false;
+
+var paramsButton1 = {onClick: captureFrame}
 
 //-- GUI interface -------------------------------------------------------------------------------
 
