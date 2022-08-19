@@ -19,7 +19,7 @@ async def server(ws: str, path: int):
 
         cv2.imwrite("teste.jpeg", img)
 
-Server = websockets.serve(server, "rezendegabriel.github.io/rva", 1234)
+Server = websockets.serve(server, "", 8080)
 
 asyncio.get_event_loop().run_until_complete(Server)
 asyncio.get_event_loop().run_forever()

@@ -92,7 +92,7 @@ let markerControlsObj = new ARjs.MarkerControls(arToolkitContext, markerRoot, {
 //-- Send button function ------------------------------------------------------------------------
 
 function sendImg() {
-	const ws = new WebSocket("wss://rezendegabriel.github.io/rva:1234/");
+	const ws = new WebSocket("ws://localhost:8080/");
 		console.log(ws);
 
 	var x = imgDataURL;
