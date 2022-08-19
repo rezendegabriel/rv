@@ -1,6 +1,7 @@
 import asyncio
 import cv2
 import numpy as np
+import os
 import urllib.request as url
 import websockets
 
@@ -19,7 +20,8 @@ async def server(ws: str, path: int):
 
         cv2.imwrite("teste.jpeg", img)
 
-Server = websockets.serve(server, "", 8080)
+PORT = int(os.environ.get("PORT", "8080")) 
+SERVER = websockets.serve(server, "", PORT)
 
-asyncio.get_event_loop().run_until_complete(Server)
+asyncio.get_event_loop().run_until_complete(SERVER)
 asyncio.get_event_loop().run_forever()
