@@ -91,17 +91,8 @@ let markerControlsObj = new ARjs.MarkerControls(arToolkitContext, markerRoot, {
 
 //-- Send button function ------------------------------------------------------------------------
 
-function getWebSocketServer() {
-	if (window.location.host === "rezendegabriel.github.io")
-		return "wss://rezendegabriel.github.io/rva/html/tf_interfaceInfo";
-	else if (window.location.host === "127.0.0.1:5500")
-		return "ws://localhost:8080/";
-	else
-		throw new Error(`Unsupported host: ${window.location.host}`);
-}
-
 function sendImg() {
-	const ws = new WebSocket(getWebSocketServer());
+	const ws = new WebSocket("ws://localhost:8080/");
 		console.log(ws);
 
 	var message = imgDataURL;
