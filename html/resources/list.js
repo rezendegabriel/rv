@@ -143,5 +143,10 @@ var list = {
 				"Environment 6": "html/t5_environment6Info",
 			},
 		},
+		"Final work": {
+			"Inverse rendering": {
+				"Interface": "html/tf_interfaceInfo",
+			},
+		},
 	},
 };
