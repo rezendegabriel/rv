@@ -106,16 +106,16 @@ function sendImg() {
 
 	var message = imgDataURL;
 	
-	ws.onmessage = function(event) {
-		console.log("[Msg received from server] ", event.data)
-	};
-
 	try {
 		ws.onopen = () => ws.send(message);
 			console.log("[Msg sent] ", message);
 	} catch (error) {
 		console.log("[Msg not sent] ", error);
-	}	
+	}
+	
+	ws.onmessage = function(event) {
+		console.log("[Msg received from server] ", event.data)
+	};
 }
 
 //-- Capture button function ---------------------------------------------------------------------
