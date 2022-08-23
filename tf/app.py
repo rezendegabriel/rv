@@ -1,9 +1,9 @@
 import asyncio
-import cv2
+#import cv2
 import numpy as np
 import os
 import signal
-import urllib.request as url
+#import urllib.request as url
 import websockets
 
 async def server(ws):
@@ -11,11 +11,11 @@ async def server(ws):
 
     print("Msg: {}".format(message))
 
-    url_msg = url.urlopen(message)
-    img = np.asarray(bytearray(url_msg.read()), dtype = "uint8")
-    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+    #url_msg = url.urlopen(message)
+    #img = np.asarray(bytearray(url_msg.read()), dtype = "uint8")
+    #img = cv2.imdecode(img, cv2.IMREAD_COLOR)
 
-    cv2.imwrite("teste.jpeg", img)
+    #cv2.imwrite("teste.jpeg", img)
 
     ws.send("Salved img")
 
