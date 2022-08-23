@@ -17,7 +17,7 @@ async def server(ws):
 
     #cv2.imwrite("teste.jpeg", img)
 
-    ws.send("Salved img")
+    await ws.send("Salved img")
 
 async def main():
     loop = asyncio.get_running_loop()
