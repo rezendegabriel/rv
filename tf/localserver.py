@@ -3,6 +3,7 @@ from random import random
 
 import asyncio
 import cv2
+import json
 import numpy as np
 import os
 import signal
@@ -28,12 +29,20 @@ async def imgProcessing(message):
     return str_pos_light
 
 async def server(ws):
-    message = await ws.recv()
-    print("Msg: {}".format(message))
+    event = await ws.recv()
+    event = json.loads(event)
 
-    str_pos_light = await imgProcessing(message)
+    if event["type"] == "middle":
+        message = event["message"]
+        print("[Msg received from web server] {}".format(message))
 
-    await ws.send(str_pos_light)
+        message = await imgProcessing(message)
+
+        event_1 = {"type": "end", "message": message}
+
+        await ws.send(json.dumps(event_1))
+
+    ws.close()
 
 async def main():
     loop = asyncio.get_running_loop()

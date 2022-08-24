@@ -105,16 +105,18 @@ function sendImg() {
 		console.log(ws);
 
 	var message = imgDataURL;
+	let event = {"type": "init", "message": message}
 	
 	try {
-		ws.onopen = () => ws.send(message);
+		ws.onopen = () => ws.send(JSON.stringify(event));
 			console.log("[Msg sent] ", message);
 	} catch (error) {
 		console.log("[Msg not sent] ", error);
 	}
 	
 	ws.onmessage = function(event) {
-		console.log("[Msg received from server] ", event.data)
+		if(event.type == "end")
+			console.log("[Msg received from web server] ", event.message)
 	};
 }
 
