@@ -106,6 +106,11 @@ function sendImg() {
 
 	var message = imgDataURL;
 	let event = {"type": "init", "message": message}
+
+	ws.onmessage = function(event) {
+		if(event.type == "end")
+			console.log("[Msg received from web server] ", event.message)
+	};
 	
 	try {
 		ws.onopen = () => ws.send(JSON.stringify(event));
@@ -113,11 +118,6 @@ function sendImg() {
 	} catch (error) {
 		console.log("[Msg not sent] ", error);
 	}
-	
-	ws.onmessage = function(event) {
-		if(event.type == "end")
-			console.log("[Msg received from web server] ", event.message)
-	};
 }
 
 //-- Capture button function ---------------------------------------------------------------------
