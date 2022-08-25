@@ -105,18 +105,18 @@ function sendImg() {
 		console.log(ws);
 
 	var message = imgDataURL;
-	let event = {"type": "init", "message": message}
+	let event = {"type": "interface", "message": message}
 
 	ws.onmessage = function(event) {
-		if(event.type == "end")
+		if(event.type == "webserver")
 			console.log("[Msg received from web server] ", event.message)
 	};
 	
 	try {
-		ws.onopen = () => ws.send(JSON.stringify(event));
-			console.log("[Msg sent] ", message);
+		ws.onopen = () => ws.send(JSON.stringify(event)); // Communication established by the interface (point 2)
+			console.log("[Msg sent to web server] ", message);
 	} catch (error) {
-		console.log("[Msg not sent] ", error);
+		console.log("[Msg not sent to web server] ", error);
 	}
 }
 

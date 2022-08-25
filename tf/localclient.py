@@ -31,15 +31,18 @@ async def imgProcessing(img_url):
     return str_pos_light
 
 async def client(ws):
-    message = await ws.recv()
-    event = json.loads(message)
+    event_1 = {"type": "localclient", "message": "Local server connected"}
+    await ws.send(json.dumps(event_1)) # Communication established with the web server (point 1)
 
-    if event["type"] == "middle":
-        str_pos_light = await imgProcessing(event["message"])
+    message = await ws.recv() # Communication established by the web server (point 1)
+    event_1 = json.loads(message)
 
-        event_1 = {"type": "end", "message": str_pos_light}
+    if event_1["type"] == "webserver":
+        str_pos_light = await imgProcessing(event_1["message"])
 
-        await ws.send(json.dumps(event_1))
+        event_1 = {"type": "localclient", "message": str_pos_light}
+
+        await ws.send(json.dumps(event_1)) # Communication established with the web server (point 1)
 
     ws.close()
 
