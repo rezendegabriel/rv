@@ -181,7 +181,7 @@ function spotLight() {
 											  parseFloat(vector3[1]),
 											  parseFloat(vector3[2]));
 	let spotLight = new THREE.SpotLight(spotLightColor);
-	let spotLightSphere = createLightSphere(markerRootLight, 0.05, 10, 10, spotLightPosition);
+	let spotLightSphere = createLightSphere(markerRoot, 0.05, 10, 10, spotLightPosition);
 		spotLight.position.copy(spotLightPosition);
 		spotLight.angle = degreesToRadians(40);
 		spotLight.intensity = 1.0;    
@@ -195,7 +195,7 @@ function spotLight() {
 
 	markerRoot.add(spotLight);
 
-	let spotLightTarget = createLightSphere(markerRootLight, 0.025, 10, 10, spotLight.target.position);
+	let spotLightTarget = createLightSphere(markerRoot, 0.025, 10, 10, spotLight.target.position);
 	spotLight.target = spotLightTarget;
 
 	markerRoot.add(spotLightTarget);
