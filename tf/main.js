@@ -104,14 +104,14 @@ function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	let event = {"type": "connection", "sender": "interface", "message": imgDataURL}
+	var event = {"type": "connection", "sender": "interface", "message": imgDataURL};
 
 	try {
-		ws.onopen = () => ws.send(JSON.stringify(event)); // Communication established with the web server (2)
+		ws.onopen = () => ws.send(JSON.stringify(event)); // Communication established with the web server (1)
 			console.log("[Connected from the web server]");
 			console.log("[Msg sent to the web server] ", imgDataURL);
 	} catch (error) {
-		console.log("[Msg not sent to the web server] ", error);
+		console.log("[Not Connected to the web server] ", error);
 	}
 
 	ws.onmessage = function(event) { // (5)
