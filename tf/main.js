@@ -138,7 +138,9 @@ function sendImg() {
 		console.log("[Image URL not sent to the web server] ", error);
 	}
 
-	ws.close();
+	setTimeout(() => {console.log("Wait 3 seconds..."); }, 3000);
+
+	ws.close()
 
 	var paramsButton3 = {onClick: receivedLightPos};
 	button3 = text1Folder.add(paramsButton3, "onClick").name("Receive Light Position");

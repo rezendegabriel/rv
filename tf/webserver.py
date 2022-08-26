@@ -6,16 +6,14 @@ import websockets
 img_url = ""
 light_pos = ""
 
-async def sendLightPos(ws):
+async def sendLightPos(ws, light_pos):
     interface = await ws.recv() # Communication restablished with the interface
     print("[" + interface + "]")
 
     await ws.send(light_pos)
     print("[Light position sent to the interface]")
-
-    ws.close()
-
-async def sendImgURL(ws):
+    
+async def sendImgURL(ws, img_url):
     local_client = await ws.recv() # Communication established with the local client
     print("[" + local_client + "]")
 
@@ -25,13 +23,13 @@ async def sendImgURL(ws):
     light_pos = await ws.recv()
     print("[Light position received from the local client]")
 
-    ws.close()
+    await sendLightPos(ws, light_pos)
     
 async def receiveImgURL(ws):
     img_url = await ws.recv() # Communication established with the interface
     print("[Image URL received from the interface]")
 
-    ws.close()
+    await sendImgURL(ws, img_url)
 
 async def main():
     loop = asyncio.get_running_loop()
@@ -39,11 +37,8 @@ async def main():
     loop.add_signal_handler(signal.SIGTERM, stop.set_result, None)
 
     PORT = int(os.environ.get("PORT", "8080"))
-    websockets.serve(receiveImgURL, "", PORT)
-
-    websockets.serve(sendImgURL, "", PORT)
-
-    websockets.serve(sendLightPos, "", PORT)
+    async with websockets.serve(receiveImgURL, "", PORT):
+        await stop
         
 if __name__ == "__main__":
     asyncio.run(main())
