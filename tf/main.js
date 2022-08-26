@@ -3,6 +3,7 @@
 import * as THREE from "three";
 import GUI from "../libs/util/dat.gui.module.js";
 import {ARjs} from  "../libs/AR/ar.js";
+import {createLightSphere} from "../libs/util/util.js";
 
 //------------------------------------------------------------------------------------------------
 //------------------------------------------ MAIN SCRIPT -----------------------------------------
@@ -11,6 +12,9 @@ import {ARjs} from  "../libs/AR/ar.js";
 //-- Setting scene and camera --------------------------------------------------------------------
 
 var scene = new THREE.Scene();
+
+let ambientLight = new THREE.AmbientLight("rgb(50, 50, 50)");
+scene.add(ambientLight);
 
 var camera = new THREE.Camera();
 scene.add(camera);
@@ -163,6 +167,66 @@ let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 //------------------------------------------------------------------------------------------------
 //------------------------------------------- Render ---------------------------------------------
 //------------------------------------------------------------------------------------------------
+
+//-- Spotlight -----------------------------------------------------------------------------------
+
+if(strPosLight != null)
+	spotLight();
+	setupScene();
+
+function spotLight() {
+	let vector3 = strPosLight.split(" ");
+
+	let spotLightColor = "rgb(255, 255, 255)";
+	let spotLightPosition = new THREE.Vector3(parseFloat(vector3[0]),
+											  parseFloat(vector3[1]),
+											  parseFloat(vector3[2]));
+	let spotLight = new THREE.SpotLight(spotLightColor);
+	let spotLightSphere = createLightSphere(markerRootLight, 0.05, 10, 10, spotLightPosition);
+		spotLight.position.copy(spotLightPosition);
+		spotLight.angle = degreesToRadians(40);
+		spotLight.intensity = 1.0;    
+		spotLight.decay = 2.0; // The amount the light dims along the distance of the light.
+		spotLight.penumbra = 0.5; // Percent of the spotlight cone that is attenuated due to penumbra. 
+
+		// Shadow settings
+		spotLight.castShadow = true;
+		spotLight.shadow.mapSize.width = 512;
+		spotLight.shadow.mapSize.height = 512;
+
+	markerRoot.add(spotLight);
+
+	let spotLightTarget = createLightSphere(markerRootLight, 0.025, 10, 10, spotLight.target.position);
+	spotLight.target = spotLightTarget;
+
+	markerRoot.add(spotLightTarget);
+}
+
+//-- Setup scene ---------------------------------------------------------------------------------
+
+function setupScene() {
+	// Floor
+	let floorGeometry = new THREE.PlaneGeometry(20, 20);
+	let floorMaterial = new THREE.ShadowMaterial();
+		floorMaterial.opacity = 0.3;
+	let floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+		floorMesh.rotation.x = -Math.PI/2;
+		floorMesh.receiveShadow = true;
+
+	markerRoot.add(floorMesh);
+
+	// Basketball
+	let ballGeometry = new THREE.SphereGeometry(5, 32, 32);
+	let ballTexture = new THREE.MeshLambertMaterial({
+		map: new THREE.TextureLoader().load("../assets/textures/basketball-gray.png"),
+		color: 0x964B00
+	});
+	let ballMesh = new THREE.Mesh(ballGeometry, ballTexture);
+		ballMesh.receiveShadow = true;
+		ballMesh.castShadow = true;
+
+	markerRoot.add(ballMesh);
+}
 
 // Update artoolkit on every frame
 function update()
