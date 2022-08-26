@@ -3,14 +3,13 @@ from random import random
 
 import asyncio
 import cv2
-import json
 import numpy as np
 import urllib.request as url
 import os
 import signal
 import websockets
 
-async def imgProcessing(ws, img_url):
+async def imgProcessing(img_url):
     print("[Msg received from the web server] {}".format(img_url))
 
     img_url = url.urlopen(img_url)
@@ -28,15 +27,12 @@ async def imgProcessing(ws, img_url):
     return str(round(coord_r, 2)) + " " + str(round(coord_g, 2)) + " " + str(round(coord_b, 2))
     
 async def webserver(ws):
-    event = await ws.recv() # Communication established with the interface
-    event = json.loads(event)
+    message = await ws.recv() # Communication established with the interface
     print("[Interface connected]")
 
-    str_pos_light = await imgProcessing(ws, event["message"])
+    str_pos_light = await imgProcessing(message)
 
-    event = {"message": str_pos_light}
-
-    await ws.send(json.dumps(event))
+    await ws.send(str_pos_light)
     print("[Msg sent to the interface] ", str_pos_light)
 
 async def main():
