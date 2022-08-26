@@ -170,9 +170,10 @@ let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 
 //-- Spotlight -----------------------------------------------------------------------------------
 
-if(strPosLight != null)
+if(strPosLight != null) {
 	spotLight();
 	setupScene();
+}
 
 function spotLight() {
 	let vector3 = strPosLight.split(" ");
