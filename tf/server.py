@@ -45,4 +45,5 @@ async def main():
         await stop
         
 if __name__ == "__main__":
+    seed(1)
     asyncio.run(main())
