@@ -107,19 +107,16 @@ function sendImg() {
 	var event = {"type": "connection", "sender": "interface", "message": imgDataURL};
 
 	try {
-		ws.onopen = () => ws.send(JSON.stringify(event)); // Communication established with the web server (1)
+		ws.onopen = () => ws.send(JSON.stringify(event)); // Communication established with the web server
 			console.log("[Connected from the web server]");
 			console.log("[Msg sent to the web server] ", imgDataURL);
 	} catch (error) {
 		console.log("[Not Connected to the web server] ", error);
 	}
 
-	ws.onmessage = function(event) { // (5)
-		if(event.type == "disconnection" && event.sender == "webserver")
+	ws.onmessage = function(event) {
+		if(event.type == "connection" && event.sender == "webserver")
 			console.log("[Msg received from the web server] ", event.message)
-
-			ws.close()
-				console.log("[Disconnected from the web server]")
 	};
 }
 
