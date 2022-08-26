@@ -168,12 +168,9 @@ let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 //------------------------------------------- Render ---------------------------------------------
 //------------------------------------------------------------------------------------------------
 
-if(strPosLight != null) {
-	spotLight();
-	setupScene();
-}
-
 //-- Spotlight -----------------------------------------------------------------------------------
+
+spotLight();
 
 function spotLight() {
 	let vector3 = strPosLight.split(" ");
@@ -204,6 +201,8 @@ function spotLight() {
 }
 
 //-- Setup scene ---------------------------------------------------------------------------------
+
+setupScene();
 
 function setupScene() {
 	// Floor
