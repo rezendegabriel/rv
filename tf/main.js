@@ -183,7 +183,6 @@ function spotLight() {
 	let spotLight = new THREE.SpotLight(spotLightColor);
 	let spotLightSphere = createLightSphere(markerRoot, 0.05, 10, 10, spotLightPosition);
 		spotLight.position.copy(spotLightPosition);
-		spotLight.angle = degreesToRadians(40);
 		spotLight.intensity = 1.0;    
 		spotLight.decay = 2.0; // The amount the light dims along the distance of the light.
 		spotLight.penumbra = 0.5; // Percent of the spotlight cone that is attenuated due to penumbra. 
