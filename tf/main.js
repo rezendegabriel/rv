@@ -114,6 +114,9 @@ function sendImg() {
 
 		var paramsText2 = {showStrPosLight: strPosLight};
 		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
+
+		spotLight();
+		setupScene();
 	};
 
 	try {
@@ -170,8 +173,6 @@ let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 
 //-- Spotlight -----------------------------------------------------------------------------------
 
-spotLight();
-
 function spotLight() {
 	let vector3 = strPosLight.split(" ");
 
@@ -201,8 +202,6 @@ function spotLight() {
 }
 
 //-- Setup scene ---------------------------------------------------------------------------------
-
-setupScene();
 
 function setupScene() {
 	// Floor
