@@ -104,23 +104,9 @@ function getWebSocketServer() {
 	  throw new Error(`Unsupported host: ${window.location.host}`);
   }
 
-function sendImg() {
+function receivedLightPos() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
-	
-	try {
-		ws.onopen = () => ws.send(imgDataURL); // Communication established with the web server
-			console.log("[Image URL sent to the web server]");
-	} catch (error) {
-		console.log("[Image URL not sent to the web server] ", error);
-	}
-
-	try {
-		ws.onopen = () => ws.send("[Interface reconnected to the web server]"); // Communication restablished with the web server
-			console.log("[Reconnected to the web server]");
-	} catch (error) {
-		console.log("[Not reconnected to the web server] ", error);
-	}
 
 	ws.onmessage = function(message) {
 		strPosLight = message.data;
@@ -132,6 +118,30 @@ function sendImg() {
 		spotLight();
 		setupScene();
 	};
+
+	try {
+		ws.onopen = () => ws.send("[Interface reconnected to the web server]"); // Communication restablished with the web server
+			console.log("[Reconnected to the web server]");
+	} catch (error) {
+		console.log("[Not reconnected to the web server] ", error);
+	}
+}
+
+function sendImg() {
+	const ws = new WebSocket(getWebSocketServer());
+		console.log(ws);
+	
+	try {
+		ws.onopen = () => ws.send(imgDataURL); // Communication established with the web server
+			console.log("[Image URL sent to the web server]");
+	} catch (error) {
+		console.log("[Image URL not sent to the web server] ", error);
+	}
+
+	ws.close();
+
+	var paramsButton3 = {onClick: receivedLightPos};
+	button3 = text1Folder.add(paramsButton3, "onClick").name("Received Light Position");
 }
 
 //-- Capture button function ---------------------------------------------------------------------
@@ -161,6 +171,7 @@ var text1Folder = null;
 var text1 = null;
 var text2 = null;
 var button2 = null;
+var button3 = null;
 
 var button1Event = false;
 

@@ -34,6 +34,8 @@ async def localClient(ws):
     await ws.send(str_pos_light)
     print("[Light position sent to the web server]")
 
+    ws.close()
+
 async def main():
     uri = "wss://websockets-rv.herokuapp.com/"
     async with websockets.connect(uri) as ws:
