@@ -20,9 +20,9 @@ async def imgProcessing(img_url):
 
     await asyncio.sleep(10)
 
-    coord_r = -5 + (random()*(5-(-5)))
-    coord_g = -5 + (random()*(5-(-5)))
-    coord_b = -5 + (random()*(5-(-5)))
+    coord_r = -3 + (random()*(3-(-3)))
+    coord_g = -3 + (random()*(3-(-3)))
+    coord_b = -3 + (random()*(3-(-3)))
 
     return str(round(coord_r, 2)) + " " + str(round(coord_g, 2)) + " " + str(round(coord_b, 2))
     
