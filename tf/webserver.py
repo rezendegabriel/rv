@@ -5,38 +5,51 @@ import signal
 from sqlite3 import connect
 import websockets
 
-async def localClient(ws, str_pos_light):
-    print("[Msg received from local server] {}".format(str_pos_light))
+async def interface(img_url):
+    print("[Message received from interface] {}".format(img_url))
 
-    event_2 = {"type": "webserver", "message": str_pos_light}
+    event = {"type": "connection", "sender": "webserver", "message": img_url}
 
-    await ws.send(json.dumps(event_2)) # Communication established to the interface (point 2)
+    await connections["localclient"].send(json.dumps(event)) # (3)
+    print("[Msg sent to the local client] ", img_url)
 
-async def interface(ws, img_url):
-    print("[Msg received from interface] {}".format(img_url))
+    event = await connections["localclient"].recv() # (4)
+    event = json.loads(event)
+    assert event["type"] == "disconnection"
 
-    event_1 = {"type": "webserver", "message": img_url}
+    if event["sender"] == "localclient": 
+        str_pos_light = event["message"]
+        print("[Message received from local client] {}".format(str_pos_light))
 
-    await ws.send(json.dumps(event_1)) # Communication established with the local client (point 1)
+        connections["localclient"].close()
+        print("[Local client disconnected]")
 
-    message = await ws.recv() # Communication established by the local client (point 1)
-    event_1 = json.loads(message)
+    event = {"type": "disconnection", "sender": "webserver", "message": str_pos_light}
 
-    if event_1["type"] == "localclient":
-        await localClient(ws, event_1["message"])
+    await connections["interface"].send(json.dumps(event)) # (5)
+    print("[Msg sent to the interface] ", str_pos_light)
 
+    connections["interface"].close()
+    print("[Interface disconnected]")
+    
 async def webserver(ws):
-    message = await ws.recv() # Communication established by the local client (point 1)
-    event_1 = json.loads(message)
+    event = await ws.recv() # Communication established with the local client (1)
+    event = json.loads(event)
+    assert event["type"] == "connection"
 
-    if event_1["type"] == "localclient":
-        print("[Msg received from local server] {}".format(event_1["message"]))
+    if event["sender"] == "localclient": 
+        connections.update({"localclient": ws})
+        print("[Local client connected]")
 
-        message = await ws.recv() # Communication established by the interface (point 2)
-        event_2 = json.loads(message)
+    event = await ws.recv() # Communication established with the interface (2)
+    event = json.loads(event)
+    assert event["type"] == "connection"
 
-        if event_2["type"] == "interface":
-            await interface(ws, event_2["message"])
+    if event["sender"] == "interface":
+        connections.update({"interface": ws})
+        print("[Interface connected]")
+
+        await interface(event["message"])
 
 async def main():
     loop = asyncio.get_running_loop()
@@ -48,4 +61,6 @@ async def main():
         await stop
         
 if __name__ == "__main__":
+    connections = {"interface": "", "localclient": ""}
+    
     asyncio.run(main())
