@@ -12,6 +12,9 @@ async def sendLightPos(ws):
 
     await ws.send(light_pos)
     print("[Light position sent to the interface]")
+
+    ws.close()
+    
 async def sendImgURL(ws):
     local_client = await ws.recv() # Communication established with the local client
     print("[" + local_client + "]")
@@ -21,10 +24,14 @@ async def sendImgURL(ws):
 
     light_pos = await ws.recv()
     print("[Light position received from the local client]")
+
+    ws.close()
     
 async def receiveImgURL(ws):
     img_url = await ws.recv() # Communication established with the interface
     print("[Image URL received from the interface]")
+
+    ws.close()
 
 async def main():
     loop = asyncio.get_running_loop()
