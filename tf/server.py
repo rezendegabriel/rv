@@ -30,17 +30,14 @@ async def imgProcessing(ws, img_url):
 async def webserver(ws):
     event = await ws.recv() # Communication established with the interface
     event = json.loads(event)
-    assert event["type"] == "connection"
+    print("[Interface connected]")
 
-    if event["sender"] == "interface": 
-        print("[Interface connected]")
+    str_pos_light = await imgProcessing(ws, event["message"])
 
-        str_pos_light = await imgProcessing(ws, event["message"])
+    event = {"message": str_pos_light}
 
-        event = {"type": "connection", "sender": "webserver", "message": str_pos_light}
-
-        await ws.send(json.dumps(event))
-        print("[Msg sent to the interface] ", str_pos_light)
+    await ws.send(json.dumps(event))
+    print("[Msg sent to the interface] ", str_pos_light)
 
 async def main():
     loop = asyncio.get_running_loop()
