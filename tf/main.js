@@ -155,7 +155,7 @@ function sendImg() {
 	ws.close();
 
 	var paramsButton3 = {onClick: receivedLightPos};
-	button3 = text1Folder.add(paramsButton3, "onClick").name("Received Light Position");
+	button3 = text1Folder.add(paramsButton3, "onClick").name("Receive Light Position");
 }
 
 //-- Capture button function ---------------------------------------------------------------------
