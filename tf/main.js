@@ -127,18 +127,6 @@ function receivedLightPos() {
 	}
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function demo(x) {
-    for (let i = 0; i < x; i++) {
-        console.log(`Waiting ${i} seconds...`);
-        await sleep(i * 1000);
-    }
-    console.log("Done");
-}
-
 function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
@@ -149,8 +137,6 @@ function sendImg() {
 	} catch (error) {
 		console.log("[Image URL not sent to the web server] ", error);
 	}
-
-	demo(3);
 
 	ws.close();
 
