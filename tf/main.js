@@ -107,10 +107,24 @@ function getWebSocketServer() {
 function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
+	
+	try {
+		ws.onopen = () => ws.send(imgDataURL); // Communication established with the web server
+			console.log("[Image URL sent to the web server]");
+	} catch (error) {
+		console.log("[Image URL not sent to the web server] ", error);
+	}
+
+	try {
+		ws.onopen = () => ws.send("[Interface reconnected to the web server]"); // Communication restablished with the web server
+			console.log("[Reconnected to the web server]");
+	} catch (error) {
+		console.log("[Not reconnected to the web server] ", error);
+	}
 
 	ws.onmessage = function(message) {
 		strPosLight = message.data;
-		console.log("[Msg received from the web server] ", strPosLight);
+		console.log("[Light position received from the web server]");
 
 		var paramsText2 = {showStrPosLight: strPosLight};
 		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
@@ -118,14 +132,6 @@ function sendImg() {
 		spotLight();
 		setupScene();
 	};
-
-	try {
-		ws.onopen = () => ws.send(imgDataURL); // Communication established with the web server
-			console.log("[Connected from the web server]");
-			console.log("[Msg sent to the web server] ", imgDataURL);
-	} catch (error) {
-		console.log("[Not Connected to the web server] ", error);
-	}
 }
 
 //-- Capture button function ---------------------------------------------------------------------

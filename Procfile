@@ -1,1 +1,1 @@
-web: python tf/server.py
+web: python tf/webserver.py
