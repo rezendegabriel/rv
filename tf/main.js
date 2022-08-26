@@ -107,6 +107,9 @@ function sendImg() {
 	ws.onmessage = function(message) {
 		strPosLight = message.data;
 		console.log("[Msg received from the web server] ", strPosLight);
+
+		var paramsText2 = {showStrPosLight: strPosLight};
+		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
 	};
 
 	try {
@@ -134,9 +137,6 @@ function captureFrame() {
 
 	var paramsButton2 = {onClick: sendImg};
 	button2 = text1Folder.add(paramsButton2, "onClick").name("Send Image");
-
-	var paramsText2 = {showStrPosLight: strPosLight};
-	text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
 
 	button1Event = true;
 }
