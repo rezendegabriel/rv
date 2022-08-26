@@ -33,17 +33,13 @@ async def interface(img_url):
     print("[Interface disconnected]")
     
 async def webserver(ws):
-    event = await ws.recv() # Communication established with the local client (1)
+    event = await ws.recv() # Communication established with the local client (1) and interface (2)
     event = json.loads(event)
     assert event["type"] == "connection"
 
     if event["sender"] == "localclient": 
         connections.update({"localclient": ws})
         print("[Local client connected]")
-
-    event = await ws.recv() # Communication established with the interface (2)
-    event = json.loads(event)
-    assert event["type"] == "connection"
 
     if event["sender"] == "interface":
         connections.update({"interface": ws})
