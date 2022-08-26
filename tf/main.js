@@ -214,12 +214,13 @@ function setupScene() {
 	markerRoot.add(floorMesh);
 
 	// Basketball
-	let ballGeometry = new THREE.SphereGeometry(5, 32, 32);
+	let ballGeometry = new THREE.SphereGeometry(1, 32, 32);
 	let ballTexture = new THREE.MeshLambertMaterial({
 		map: new THREE.TextureLoader().load("../assets/textures/basketball-gray.png"),
 		color: 0x964B00
 	});
 	let ballMesh = new THREE.Mesh(ballGeometry, ballTexture);
+		ballMesh.position.y = 0.5;
 		ballMesh.receiveShadow = true;
 		ballMesh.castShadow = true;
 
