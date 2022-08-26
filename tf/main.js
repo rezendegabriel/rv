@@ -105,7 +105,8 @@ function sendImg() {
 		console.log(ws);
 
 	ws.onmessage = function(message) {
-		console.log("[Msg received from the web server] ", message.data)
+		strPosLight = message.data;
+		console.log("[Msg received from the web server] ", strPosLight);
 	};
 
 	try {
@@ -134,6 +135,9 @@ function captureFrame() {
 	var paramsButton2 = {onClick: sendImg};
 	button2 = text1Folder.add(paramsButton2, "onClick").name("Send Image");
 
+	var paramsText2 = {showStrPosLight: strPosLight};
+	text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
+
 	button1Event = true;
 }
 
@@ -142,11 +146,14 @@ var img_i = 1;
 
 var text1Folder = null;
 var text1 = null;
+var text2 = null;
 var button2 = null;
 
 var button1Event = false;
 
 var paramsButton1 = {onClick: captureFrame}
+
+var strPosLight = null
 
 //-- GUI interface -------------------------------------------------------------------------------
 
