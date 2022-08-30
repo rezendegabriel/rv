@@ -99,32 +99,41 @@ function getWebSocketServer() {
 	if (window.location.host === "rezendegabriel.github.io")
 		return "wss://websockets-rv.herokuapp.com/";
 	else if (window.location.host === "127.0.0.1:5500")
-	  return "ws://127.0.0.1:8080/";
+	  return "ws://127.0.0.1:1234";
 	else
 	  throw new Error(`Unsupported host: ${window.location.host}`);
   }
 
 function sendImg() {
-	const ws = new WebSocket(getWebSocketServer());
-		console.log(ws);
+	const HOST = getWebSocketServer();
+	const socket = new WebSocket(IP);
+		console.log("[CONNECTED] Client connected to server at {}".format(HOST));
 
-	ws.onmessage = function(message) {
-		strPosLight = message.data;
-		console.log("[Msg received from the web server] ", strPosLight);
+	socket.addEventListener("open", () => {
+		socket.send(JSON.stringify({
+			type: "interface",
+			message: imgDataURL,
+		}));
+			console.log("[Message] ", imgDataURL);
+	})
 
-		var paramsText2 = {showStrPosLight: strPosLight};
-		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
+	socket.addEventListener("message", ({data}) => {
+		const packet = JSON.parse(data);
 
-		spotLight();
-		setupScene();
-	};
+		switch(packet.type) {
+			case "server":
+				strPosLight = data.message;
+					console.log("[SERVER] ", strPosLight);
 
-	try {
-		ws.onopen = () => ws.send(imgDataURL); // Communication established with the web server
-			console.log("[Msg sent to the web server] ", imgDataURL);
-	} catch (error) {
-		console.log("[Not Connected to the web server] ", error);
-	}
+				var paramsText2 = {showStrPosLight: strPosLight};
+				text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
+		
+				spotLight();
+				setupScene();
+
+				break;
+		}
+	});
 }
 
 //-- Capture button function ---------------------------------------------------------------------

@@ -4,9 +4,9 @@ from random import random
 import asyncio
 import cv2
 import numpy as np
-import urllib.request as url
 import os
 import signal
+import urllib.request as url
 import websockets
 
 async def imgProcessing(img_url):
