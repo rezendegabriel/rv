@@ -110,11 +110,11 @@ function sendImg() {
 
 	ws.addEventListener("open", () => {
 		ws.send(imgDataURL);
-			console.log("[Msg sent to the web server] ", imgDataURL);
+			console.log("[Msg sent to the server] ", imgDataURL);
 	});
 
 	ws.addEventListener("message", ({strPosLight}) => {
-		console.log("[Msg received from the web server] ", strPosLight);
+		console.log("[Msg received from the server] ", strPosLight);
 
 		var paramsText2 = {showStrPosLight: strPosLight};
 		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");

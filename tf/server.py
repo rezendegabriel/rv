@@ -1,40 +1,46 @@
-from random import seed
-from random import random
-
 import asyncio
-import cv2
-import numpy as np
 import os
 import signal
-import urllib.request as url
 import websockets
 
-async def imgProcessing(img_url):
-    print("[Msg received from the web server] {}".format(img_url))
+CONNECTIONS = []
 
-    img_url = url.urlopen(img_url)
-    img = np.asarray(bytearray(img_url.read()), dtype = "uint8")
-    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+IMG_URL = ""
+LIGHT_POS = ""
 
-    cv2.imwrite("img.jpeg", img)
+IMG_URL_RECEIVED = False
+IMG_URL_SEND = False
 
-    await asyncio.sleep(10)
-
-    coord_r = -3 + (random()*(3-(-3)))
-    coord_g = -3 + (random()*(3-(-3)))
-    coord_b = -3 + (random()*(3-(-3)))
-
-    return str(round(coord_r, 2)) + " " + str(round(coord_g, 2)) + " " + str(round(coord_b, 2))
+LIGHT_POS_SEND = False
+LIGHT_POS_RECEIVED = False
     
 async def webserver(ws):
-    message = await ws.recv() # Communication established with the interface
-    print("[Interface connected]")
+    CONNECTIONS.append(ws)
 
-    str_pos_light = await imgProcessing(message)
+    if not IMG_URL_RECEIVED:
+        IMG_URL = await CONNECTIONS[0].recv() # Received image URL from the interface
+        print("[Msg received from the iterface] ", IMG_URL)
 
-    await ws.send(str_pos_light)
-    print("[Msg sent to the interface] ", str_pos_light)
+        IMG_URL_RECEIVED = True
 
+    if len(CONNECTIONS) == 2:
+        if IMG_URL_RECEIVED:
+            await CONNECTIONS[1].send(IMG_URL) # Sent image URL to the render
+
+            IMG_URL_SEND = True
+
+        if IMG_URL_SEND:
+            LIGHT_POS = await CONNECTIONS[1].recv() # Received light position from the render
+            print("[Msg received from the render] ", LIGHT_POS)
+
+            LIGHT_POS_RECEIVED = True
+            CONNECTIONS.pop()
+
+        if LIGHT_POS_RECEIVED:
+            await CONNECTIONS[0].send(LIGHT_POS) # Sent light position to the interface
+
+            LIGHT_POS_SEND = True
+            CONNECTIONS.pop()
 async def main():
     loop = asyncio.get_running_loop()
     stop = loop.create_future()
@@ -45,5 +51,4 @@ async def main():
         await stop
         
 if __name__ == "__main__":
-    seed(1)
     asyncio.run(main())
