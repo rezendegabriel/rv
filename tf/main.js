@@ -173,7 +173,7 @@ function sendImg() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	ws.onmessage = function({event_connection}) {
+	ws.onmessage = function(event_connection) {
 		if(event_connection.type == "connection") {
 			connection = true;
 			console.log("[Connected]");

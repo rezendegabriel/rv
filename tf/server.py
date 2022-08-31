@@ -41,6 +41,7 @@ async def webserver(ws):
                     "type": "disconnection"
                 }
 
+                CONNECTIONS -= 1
                 await ws.send(json.dumps(event_connection))
                 print("[Connection not allowed]")
 
@@ -76,6 +77,8 @@ async def webserver(ws):
                 }
 
                 await ws.send(json.dumps(event_connection))
+
+                CONNECTIONS -= 1
                 print("[Connection not allowed]")
 
     if CONNECTIONS == 3: # Case when the light position can be sent to the Render
@@ -104,6 +107,8 @@ async def webserver(ws):
                 }
 
                 await ws.send(json.dumps(event_connection))
+
+                CONNECTIONS -= 1
                 print("[Connection not allowed]")
 
 async def main():
