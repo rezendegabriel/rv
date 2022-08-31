@@ -104,19 +104,24 @@ function getWebSocketServer() {
 	  throw new Error(`Unsupported host: ${window.location.host}`);
   }
 
-function sendImg() {
+function receivedLightPos() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	ws.onmessage = function(strPosLight) {
-		console.log("[Msg received from the server] ", strPosLight);
+	ws.onmessage = function(lightPos) {
+		console.log("[Msg received from the server] ", lightPos);
 
-		var paramsText2 = {showStrPosLight: strPosLight};
-		text2 = text1Folder.add(paramsText2, "showStrPosLight").name("");
+		var paramsText2 = {showLightPos: lightPos};
+		text2 = text1Folder.add(paramsText2, "showLightPos").name("");
 
 		spotLight();
 		setupScene();
 	}
+}
+
+function sendImg() {
+	const ws = new WebSocket(getWebSocketServer());
+		console.log(ws);
 
 	try {
 		ws.onopen = () => ws.send(imgDataURL);
@@ -124,6 +129,9 @@ function sendImg() {
 	} catch(error) {
 		console.log("[Msg not sent to the server]");
 	}
+
+	var paramsButton3 = {onClick: receivedLightPos};
+	button3 = text1Folder.add(paramsButton3, "onClick").name("Received Light Position");
 }
 
 //-- Capture button function ---------------------------------------------------------------------
@@ -149,16 +157,17 @@ function captureFrame() {
 var imgDataURL = null;
 var img_i = 1;
 
+var lightPos = null
+
 var text1Folder = null;
 var text1 = null;
 var text2 = null;
 var button2 = null;
+var button3 = null;
 
 var button1Event = false;
 
 var paramsButton1 = {onClick: captureFrame}
-
-var strPosLight = null
 
 //-- GUI interface -------------------------------------------------------------------------------
 
@@ -172,7 +181,7 @@ let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 //-- Spotlight -----------------------------------------------------------------------------------
 
 function spotLight() {
-	let vector3 = strPosLight.split(" ");
+	let vector3 = lightPos.split(" ");
 
 	let spotLightColor = "rgb(255, 255, 255)";
 	let spotLightPosition = new THREE.Vector3(parseFloat(vector3[0]),
