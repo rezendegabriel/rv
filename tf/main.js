@@ -108,11 +108,6 @@ function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	ws.addEventListener("open", () => {
-		ws.send(imgDataURL);
-			console.log("[Msg sent to the server] ", imgDataURL);
-	});
-
 	ws.addEventListener("message", ({strPosLight}) => {
 		console.log("[Msg received from the server] ", strPosLight);
 
@@ -121,6 +116,11 @@ function sendImg() {
 
 		spotLight();
 		setupScene();
+	});
+
+	ws.addEventListener("open", () => {
+		ws.send(imgDataURL);
+			console.log("[Msg sent to the server] ", imgDataURL);
 	});
 }
 
