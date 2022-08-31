@@ -18,7 +18,7 @@ async def webserver(ws):
     global CONNECTIONS
     global IMG_URL, LIGHT_POS
     global IMG_URL_RECEIVED, IMG_URL_SEND, LIGHT_POS_SEND, LIGHT_POS_RECEIVED
-    
+
     CONNECTIONS.append(ws)
 
     if not IMG_URL_RECEIVED:
@@ -38,13 +38,11 @@ async def webserver(ws):
             print("[Msg received from the render] ", LIGHT_POS)
 
             LIGHT_POS_RECEIVED = True
-            CONNECTIONS.pop()
 
         if LIGHT_POS_RECEIVED:
             await CONNECTIONS[0].send(LIGHT_POS) # Sent light position to the interface
 
             LIGHT_POS_SEND = True
-            CONNECTIONS.pop()
 async def main():
     loop = asyncio.get_running_loop()
     stop = loop.create_future()
