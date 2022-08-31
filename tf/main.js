@@ -174,6 +174,8 @@ function sendImg() {
 	}
 
 	ws.onmessage = function(event_connection) {
+		console.log(event_connection);
+		
 		if(event_connection.type == "connection") {
 			connection = true;
 			console.log("[Connected]");
