@@ -15,6 +15,10 @@ LIGHT_POS_SEND = False
 LIGHT_POS_RECEIVED = False
     
 async def webserver(ws):
+    global CONNECTIONS
+    global IMG_URL, LIGHT_POS
+    global IMG_URL_RECEIVED, IMG_URL_SEND, LIGHT_POS_SEND, LIGHT_POS_RECEIVED
+    
     CONNECTIONS.append(ws)
 
     if not IMG_URL_RECEIVED:
