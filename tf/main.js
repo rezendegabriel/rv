@@ -108,15 +108,54 @@ function receivedLightPos() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	ws.onmessage = function(message) {
-		lightPos = message.data
-		console.log("[Msg received from the server] ", lightPos);
+	// Establishing connection
+	var connection = false;
+	try {
+		const event_connection = {
+			type: "connection",
+			sender: "interface"
+		}
 
-		var paramsText2 = {showLightPos: lightPos};
-		text2 = text1Folder.add(paramsText2, "showLightPos").name("");
+		ws.onopen = () => ws.send(JSON.stringify(event_connection));
+			console.log("[Connecting to the Server...]");
+	} catch(error) {
+		console.log("[Error: connection to the Server fail]");
+	}
 
-		spotLight();
-		setupScene();
+	ws.onmessage = function(data) {
+		const event_connection = JSON.parse(data);
+
+		if(event_connection.type == "connection") {
+			connection = true;
+			console.log("[Connected]");
+		}
+		else {
+			console.log("[Connection not allowed]");
+		}
+	}
+	
+	if(connection) {
+		ws.onmessage = function(data) {
+			const event_recv = JSON.parse(data);
+
+			if(event_recv.type == "send") {
+				lightPos = event_recv.message
+					console.log("[Message received by the Server] ", lightPos);
+					console.log("[Disconnected]");
+				
+				text1Folder.remove(button3);
+
+				var paramsText2 = {showLightPos: lightPos};
+				text2 = text1Folder.add(paramsText2, "showLightPos").name("");
+
+				spotLight();
+				setupScene();
+			}
+			else {
+				console.log("[Unrecognized type]");
+				console.log("[Disconnected]");
+			}
+		}
 	}
 }
 
@@ -124,15 +163,59 @@ function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
+	// Establishing connection
+	var connection = false;
 	try {
-		ws.onopen = () => ws.send(imgDataURL);
-			console.log("[Msg sent to the server] ", imgDataURL);
+		const event_connection = {
+			type: "connection",
+			sender: "interface"
+		}
+
+		ws.onopen = () => ws.send(JSON.stringify(event_connection));
+			console.log("[Connecting to the Server...]");
 	} catch(error) {
-		console.log("[Msg not sent to the server]");
+		console.log("[Error: connection to the Server fail]");
 	}
 
-	var paramsButton3 = {onClick: receivedLightPos};
-	button3 = text1Folder.add(paramsButton3, "onClick").name("Received Light Position");
+	ws.onmessage = function(data) {
+		const event_connection = JSON.parse(data);
+
+		if(event_connection.type == "connection") {
+			connection = true;
+			console.log("[Connected]");
+		}
+		else {
+			console.log("[Connection not allowed]");
+		}
+	}
+
+	// Sending image URL
+	if(connection) {
+		var send = false;
+		try {
+			const event_send = {
+				type: "send",
+				message: imgURL
+			}
+
+			ws.onopen = () => ws.send(JSON.stringify(event_send));
+				console.log("[Message sent to the Server] ", imgURL);
+				console.log("[Disconnected]");
+			
+			send = true;
+		} catch(error) {
+			console.log("[Error: message not sent to the Server]");
+			console.log("[Disconnected]");
+		}
+	}
+
+	// Receiving light position
+	if(send) {
+		text1Folder.remove(button2);
+
+		var paramsButton3 = {onClick: receivedLightPos};
+		button3 = text1Folder.add(paramsButton3, "onClick").name("Receive light pos.");
+	}
 }
 
 //-- Capture button function ---------------------------------------------------------------------
@@ -144,10 +227,10 @@ function captureFrame() {
 	text1Folder = gui.addFolder("Image Data URL " + img_i);
 	img_i += 1;
 
-	imgDataURL = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
+	imgURL = arToolkitContext.arController.canvas.toDataURL("image/jpeg");
 	
-	var paramsText1 = {showImgDataURL: imgDataURL};
-	text1 = text1Folder.add(paramsText1, "showImgDataURL").name("");
+	var paramsText1 = {showImgURL: imgURL};
+	text1 = text1Folder.add(paramsText1, "showImgURL").name("");
 
 	var paramsButton2 = {onClick: sendImg};
 	button2 = text1Folder.add(paramsButton2, "onClick").name("Send Image");
@@ -155,7 +238,7 @@ function captureFrame() {
 	button1Event = true;
 }
 
-var imgDataURL = null;
+var imgURL = null;
 var img_i = 1;
 
 var lightPos = null
@@ -222,13 +305,13 @@ function setupScene() {
 	markerRoot.add(floorMesh);
 
 	// Basketball
-	let ballGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+	let ballGeometry = new THREE.SphereGeometry(0.4, 32, 32);
 	let ballTexture = new THREE.MeshLambertMaterial({
 		map: new THREE.TextureLoader().load("../assets/textures/basketball-gray.png"),
 		color: 0x964B00
 	});
 	let ballMesh = new THREE.Mesh(ballGeometry, ballTexture);
-		ballMesh.position.y = 0.25;
+		ballMesh.position.y = 0.2;
 		ballMesh.receiveShadow = true;
 		ballMesh.castShadow = true;
 

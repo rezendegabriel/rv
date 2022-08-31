@@ -1,9 +1,10 @@
 import asyncio
+import json
 import os
 import signal
 import websockets
 
-CONNECTIONS = []
+CONNECTIONS = 0
 
 IMG_URL = ""
 LIGHT_POS = ""
@@ -12,25 +13,98 @@ async def webserver(ws):
     global CONNECTIONS
     global IMG_URL, LIGHT_POS
 
-    CONNECTIONS.append(ws)
+    CONNECTIONS += 1
 
-    if len(CONNECTIONS) == 1:
-        print("[Interface connected]")
-        IMG_URL = await CONNECTIONS[0].recv() # Received image URL from the interface
-        print("[Msg received from the iterface] ", IMG_URL)
+    data = await ws.recv()
+    event_connection = json.load(data)
 
-    if len(CONNECTIONS) == 2:
-        print("[Render connected]")
-        await CONNECTIONS[1].send(IMG_URL) # Sent image URL to the render
+    if CONNECTIONS == 1: # Case when the image URL will be received by the Interface
+        if event_connection["type"] == "connection":
+            if event_connection["sender"] == "interface": # Authentication layer
+                event_connection = {
+                    "type": "connection"
+                }
 
-        LIGHT_POS = await CONNECTIONS[1].recv() # Received light position from the render
-        print("[Msg received from the render] ", LIGHT_POS)
+                await ws.send(json.dumps(event_connection))
+                print("[Interface connected]")
 
-    if len(CONNECTIONS) == 3:
-        print("[Interface reconnected]")
-        await CONNECTIONS[2].send(LIGHT_POS) # Sent light position to the interface
+                data = await ws.recv() # Received image URL by the Interface
+                event_recv = json.load(data)
 
-        CONNECTIONS.clear()
+                if event_recv["type"] == "send":
+                    IMG_URL = event_recv["message"]
+                    print("[Message received by the Interface] {}".format(IMG_URL))
+
+                print("[Interface disconnected]")
+            else:
+                event_connection = {
+                    "type": "disconnection"
+                }
+
+                await ws.send(json.dumps(event_connection))
+                print("[Connection not allowed]")
+
+    if CONNECTIONS == 2: # Case when the image URL can be sent to the Render
+        if event_connection["type"] == "connection":
+            if event_connection["sender"] == "render": # Authentication layer
+                event_connection = {
+                    "type": "connection"
+                }
+
+                await ws.send(json.dumps(event_connection))
+                print("[Render connected]")
+
+                event_send = {
+                    "type": "send",
+                    "message": IMG_URL
+                }
+
+                await ws.send(json.dumps(event_send)) # Sent image URL to the Render
+                print("[Image URL sent to the Render]")
+
+                data = await ws.recv() # Received light position by the Render
+                event_recv = json.load(data)
+
+                if event_recv["type"] == "send":
+                    LIGHT_POS = event_recv["message"]
+                    print("[Message received by the Render] {}".format(LIGHT_POS))
+
+                print("[Render disconnected]")
+            else:
+                event_connection = {
+                    "type": "disconnection"
+                }
+
+                await ws.send(json.dumps(event_connection))
+                print("[Connection not allowed]")
+
+    if CONNECTIONS == 3: # Case when the light position can be sent to the Render
+        if event_connection["type"] == "connection":
+            if event_connection["sender"] == "interface": # Authentication layer
+                event_connection = {
+                    "type": "connection"
+                }
+
+                await ws.send(json.dumps(event_connection))
+                print("[Interface connected]")
+
+                event_send = {
+                    "type": "send",
+                    "message": LIGHT_POS
+                }
+
+                await ws.send(json.dumps(event_send)) # Sent light position to the Interface
+                print("[Light position sent to the Interface]")
+
+                CONNECTIONS = 0
+                print("[Interface disconnected]")
+            else:
+                event_connection = {
+                    "type": "disconnection"
+                }
+
+                await ws.send(json.dumps(event_connection))
+                print("[Connection not allowed]")
 
 async def main():
     loop = asyncio.get_running_loop()
