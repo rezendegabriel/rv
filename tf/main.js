@@ -122,9 +122,7 @@ function receivedLightPos() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	ws.onmessage = function(data) {
-		const event_connection = JSON.parse(data);
-
+	ws.onmessage = function(event_connection) {
 		if(event_connection.type == "connection") {
 			connection = true;
 			console.log("[Connected]");
@@ -135,9 +133,7 @@ function receivedLightPos() {
 	}
 	
 	if(connection) {
-		ws.onmessage = function(data) {
-			const event_recv = JSON.parse(data);
-
+		ws.onmessage = function(event_recv) {
 			if(event_recv.type == "send") {
 				lightPos = event_recv.message
 					console.log("[Message received by the Server] ", lightPos);
@@ -177,9 +173,7 @@ function sendImg() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	ws.onmessage = function(data) {
-		const event_connection = JSON.parse(data);
-
+	ws.onmessage = function({event_connection}) {
 		if(event_connection.type == "connection") {
 			connection = true;
 			console.log("[Connected]");
