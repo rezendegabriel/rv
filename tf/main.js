@@ -108,7 +108,7 @@ function sendImg() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	ws.addEventListener("message", ({strPosLight}) => {
+	ws.onmessage = function(strPosLight) {
 		console.log("[Msg received from the server] ", strPosLight);
 
 		var paramsText2 = {showStrPosLight: strPosLight};
@@ -116,12 +116,14 @@ function sendImg() {
 
 		spotLight();
 		setupScene();
-	});
+	}
 
-	ws.addEventListener("open", () => {
-		ws.send(imgDataURL);
+	try {
+		ws.onopen = () => ws.send(imgDataURL);
 			console.log("[Msg sent to the server] ", imgDataURL);
-	});
+	} catch(error) {
+		console.log("[Msg not sent to the server]");
+	}
 }
 
 //-- Capture button function ---------------------------------------------------------------------
