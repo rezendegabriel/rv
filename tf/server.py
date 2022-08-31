@@ -16,7 +16,7 @@ async def webserver(ws):
     CONNECTIONS += 1
 
     data = await ws.recv()
-    event_connection = json.load(data)
+    event_connection = json.loads(data)
 
     if CONNECTIONS == 1: # Case when the image URL will be received by the Interface
         if event_connection["type"] == "connection":
@@ -29,7 +29,7 @@ async def webserver(ws):
                 print("[Interface connected]")
 
                 data = await ws.recv() # Received image URL by the Interface
-                event_recv = json.load(data)
+                event_recv = json.loads(data)
 
                 if event_recv["type"] == "send":
                     IMG_URL = event_recv["message"]
@@ -63,7 +63,7 @@ async def webserver(ws):
                 print("[Image URL sent to the Render]")
 
                 data = await ws.recv() # Received light position by the Render
-                event_recv = json.load(data)
+                event_recv = json.loads(data)
 
                 if event_recv["type"] == "send":
                     LIGHT_POS = event_recv["message"]

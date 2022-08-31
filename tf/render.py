@@ -28,7 +28,7 @@ async def render():
 
 
         data = await ws.recv()
-        event_connection = json.load(data)
+        event_connection = json.loads(data)
 
         if event_connection["type"] == "connection":
             connection = True
@@ -38,7 +38,7 @@ async def render():
 
         if(connection):
             data = await ws.recv()
-            event_recv = json.load(data)
+            event_recv = json.loads(data)
 
             if event_recv["type"] == "send":
                 img_url = event_recv["message"] # Received image URL by the Server
