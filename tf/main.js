@@ -108,7 +108,8 @@ function receivedLightPos() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
-	ws.onmessage = function(lightPos) {
+	ws.onmessage = function(message) {
+		lightPos = message.data
 		console.log("[Msg received from the server] ", lightPos);
 
 		var paramsText2 = {showLightPos: lightPos};

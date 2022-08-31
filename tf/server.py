@@ -27,7 +27,7 @@ async def webserver(ws):
         print("[Msg received from the render] ", LIGHT_POS)
 
     if len(CONNECTIONS) == 3:
-        print("[Render reconnected]")
+        print("[Interface reconnected]")
         await CONNECTIONS[2].send(LIGHT_POS) # Sent light position to the interface
 
         CONNECTIONS.clear()
