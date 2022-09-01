@@ -83,7 +83,7 @@ async def webserver(ws):
                 CONNECTIONS -= 1
                 print("[Connection not allowed]")
 
-    if CONNECTIONS == 3: # Case when the light position can be sent to the Render
+    if CONNECTIONS == 3: # Case when the light position can be sent to the Interface
         if event_connection["type"] == "connection":
             if event_connection["sender"] == "interface": # Authentication layer
                 event_connection = {
@@ -91,7 +91,7 @@ async def webserver(ws):
                 }
 
                 await ws.send(json.dumps(event_connection))
-                print("[Interface connected]")
+                print("[Interface reconnected]")
 
                 event_send = {
                     "type": "send",

@@ -163,7 +163,7 @@ function sendImg() {
 			message: imgURL
 		};
 
-		ws1.onopen = () => ws1.send(JSON.stringify(event_send));
+		ws1.send(JSON.stringify(event_send));
 			console.log("[Message sent to the Server] ", imgURL);
 			console.log("[Disconnected]");
 		
