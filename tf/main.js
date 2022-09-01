@@ -123,7 +123,7 @@ function receivedLightPos() {
 	}
 
 	ws.onmessage = function(messageEvent) {
-		const event_connection = messageEvent.data
+		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
 			connection = true;
@@ -136,7 +136,7 @@ function receivedLightPos() {
 	
 	if(connection) {
 		ws.onmessage = function(messageEvent) {
-			const event_recv = messageEvent.data
+			const event_recv = JSON.parse(messageEvent.data);
 
 			if(event_recv.type == "send") {
 				lightPos = event_recv.message
@@ -178,10 +178,7 @@ function sendImg() {
 	}
 
 	ws.onmessage = function(messageEvent) {
-		console.log(messageEvent);
-
-		const event_connection = messageEvent.data
-			console.log(event_connection);
+		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
 			connection = true;
