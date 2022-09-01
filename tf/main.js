@@ -185,6 +185,10 @@ function sendImg() {
 					message: imgURL
 				};
 
+				setTimeout(() => {
+					console.log("[Delayed for 2 seconds]");
+				}, 2000);
+
 				ws.onopen = () => ws.send(JSON.stringify(event_send));
 					console.log("[Message sent to the Server] ", imgURL);
 					console.log("[Disconnected]");
