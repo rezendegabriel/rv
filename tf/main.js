@@ -135,7 +135,7 @@ function receivedLightPos() {
 						console.log("[Message received by the Server] ", lightPos);
 						console.log("[Disconnected]");
 					
-					text1Folder.remove(button3);
+					text1Folder.remove(button4);
 
 					var paramsText2 = {showLightPos: lightPos};
 					text2 = text1Folder.add(paramsText2, "showLightPos").name("");
@@ -155,7 +155,30 @@ function receivedLightPos() {
 	}
 }
 
-function sendImg() {
+function sendImg(ws) {
+	// Sending image URL
+	try {
+		const event_send = {
+			type: "send",
+			message: imgURL
+		};
+
+		ws.onopen = () => ws.send(JSON.stringify(event_send));
+			console.log("[Message sent to the Server] ", imgURL);
+			console.log("[Disconnected]");
+		
+		text1Folder.remove(button3);
+
+		var paramsButton4 = {onClick: receivedLightPos};
+		button4 = text1Folder.add(paramsButton4, "onClick").name("Get Ligh Position");
+	} catch(error) {
+		console.log("[Error: message not sent to the Server]");
+		console.log("[Disconnected]");
+	}
+
+}
+
+function connect() {
 	const ws = new WebSocket(getWebSocketServer());
 		console.log(ws);
 
@@ -178,29 +201,10 @@ function sendImg() {
 		if(event_connection.type == "connection") {
 			console.log("[Connected]");
 
-			// Sending image URL
-			try {
-				const event_send = {
-					type: "send",
-					message: imgURL
-				};
+			text1Folder.remove(button2);
 
-				setTimeout(() => {
-					console.log("[Delayed for 2 seconds]");
-				}, 2000);
-
-				ws.onopen = () => ws.send(JSON.stringify(event_send));
-					console.log("[Message sent to the Server] ", imgURL);
-					console.log("[Disconnected]");
-				
-				text1Folder.remove(button2);
-
-				var paramsButton3 = {onClick: receivedLightPos};
-				button3 = text1Folder.add(paramsButton3, "onClick").name("Receive light pos.");
-			} catch(error) {
-				console.log("[Error: message not sent to the Server]");
-				console.log("[Disconnected]");
-			}
+			var paramsButton3 = {onClick: sendImg(ws)};
+			button3 = text1Folder.add(paramsButton3, "onClick").name("Send");
 		}
 		else {
 			console.log("[Connection not allowed]");
@@ -222,8 +226,8 @@ function captureFrame() {
 	var paramsText1 = {showImgURL: imgURL};
 	text1 = text1Folder.add(paramsText1, "showImgURL").name("");
 
-	var paramsButton2 = {onClick: sendImg};
-	button2 = text1Folder.add(paramsButton2, "onClick").name("Send Image");
+	var paramsButton2 = {onClick: connect};
+	button2 = text1Folder.add(paramsButton2, "onClick").name("Connect");
 
 	button1Event = true;
 }
@@ -236,8 +240,10 @@ var lightPos = null
 var text1Folder = null;
 var text1 = null;
 var text2 = null;
+var button1 = null;
 var button2 = null;
 var button3 = null;
+var button4 = null;
 
 var button1Event = false;
 
@@ -246,7 +252,7 @@ var paramsButton1 = {onClick: captureFrame}
 //-- GUI interface -------------------------------------------------------------------------------
 
 var gui = new GUI();
-let button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
+button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 
 //------------------------------------------------------------------------------------------------
 //------------------------------------------- Render ---------------------------------------------
