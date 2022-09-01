@@ -1,11 +1,8 @@
-from random import seed
-from random import random
-from random import randrange
-
 import asyncio
 import cv2
 import json
 import numpy as np
+import random
 import urllib.request as url
 import websockets
 
@@ -51,20 +48,20 @@ async def render():
                 cv2.imwrite("img.jpeg", img)
 
                 await asyncio.sleep(10)
-
-                pos_neg = randrange(-1, 2, 1) # Positive or negative x axis
+                
+                pos_neg = random.randrange(-1, 2, 1) # Positive or negative x axis
                 if pos_neg == 1:
-                    coord_r = 0.25 + (random()*(2-(0.25)))
+                    coord_r = random.uniform(0.25, 2)
                 else:
-                    coord_r = -2 + (random()*(-0.25-(-2)))
+                    coord_r = random.uniform(-2, -0.25)
 
-                pos_neg = randrange(-1, 2, 1) # Positive or negative z axis
+                pos_neg = random.randrange(-1, 2, 1) # Positive or negative z axis
                 if pos_neg == 1:
-                    coord_b = 0.25 + (random()*(2-(0.25)))
+                    coord_b = random.uniform(0.25, 2)
                 else:
-                    coord_b = -2 + (random()*(-0.25-(-2)))
+                    coord_b = random.uniform(-2, -0.25)
 
-                coord_g = 0.25 + (random()*(2-(0.25))) # Positive y axis
+                coord_g = random.uniform(0.25, 2)
 
                 light_pos = str(round(coord_r, 2)) + " " + str(round(coord_g, 2)) + " " + str(round(coord_b, 2))
 
@@ -82,5 +79,4 @@ async def render():
                     print("[Disconnected]")
 
 if __name__ == "__main__":
-    seed(1)
     asyncio.run(render())
