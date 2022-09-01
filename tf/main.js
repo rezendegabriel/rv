@@ -109,7 +109,7 @@ function receivedLightPos() {
 		console.log(ws);
 
 	// Establishing connection
-	let connection = false;
+	let connection = 0;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -126,8 +126,7 @@ function receivedLightPos() {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
-			connection = !connection;
-				console.log(connection);
+			connection = 1;
 			console.log("[Connected]");
 		}
 		else {
@@ -135,9 +134,7 @@ function receivedLightPos() {
 		}
 	}
 
-	console.log(connection);
-
-	if(connection) {
+	if(connection == 1) {
 		ws.onmessage = function(messageEvent) {
 			const event_recv = JSON.parse(messageEvent.data);
 
@@ -167,7 +164,7 @@ function sendImg() {
 		console.log(ws);
 
 	// Establishing connection
-	let connection = false;
+	let connection = 0;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -184,9 +181,7 @@ function sendImg() {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
-			connection = !connection;
-				console.log(connection);
-
+			connection = 1;
 			console.log("[Connected]");
 		}
 		else {
@@ -194,11 +189,9 @@ function sendImg() {
 		}
 	}
 
-	console.log(connection);
-
 	// Sending image URL
-	let send = false;
-	if(connection) {
+	let send = 0;
+	if(connection == 1) {
 		try {
 			const event_send = {
 				type: "send",
@@ -209,7 +202,7 @@ function sendImg() {
 				console.log("[Message sent to the Server] ", imgURL);
 				console.log("[Disconnected]");
 			
-			send = !send;
+			send = 1;
 				console.log(send);
 		} catch(error) {
 			console.log("[Error: message not sent to the Server]");
@@ -217,10 +210,8 @@ function sendImg() {
 		}
 	}
 
-	console.log(send);
-
 	// Receiving light position
-	if(send) {
+	if(send == 1) {
 		text1Folder.remove(button2);
 
 		var paramsButton3 = {onClick: receivedLightPos};

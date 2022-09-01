@@ -100,6 +100,10 @@ async def webserver(ws):
                 print("[Light position sent to the Interface]")
 
                 CONNECTIONS = 0
+
+                IMG_URL = ""
+                LIGHT_POS = ""
+
                 print("[Interface disconnected]")
             else:
                 event_connection = {
@@ -121,4 +125,12 @@ async def main():
         await stop
         
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except NameError:
+        CONNECTIONS = 0
+
+        IMG_URL = ""
+        LIGHT_POS = ""
+
+        print("[Error: Server fail]")
