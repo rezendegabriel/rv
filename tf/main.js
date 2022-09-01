@@ -191,6 +191,8 @@ function sendImg() {
 
 	// Sending image URL
 	if(connection) {
+		console.log("[Sending image URL...]");
+
 		var send = false;
 		try {
 			const event_send = {
