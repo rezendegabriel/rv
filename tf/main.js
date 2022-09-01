@@ -124,7 +124,7 @@ function receivedLightPos() {
 
 	ws.onmessage = function(messageEvent) {
 		const event_connection = messageEvent.data
-		
+
 		if(event_connection.type == "connection") {
 			connection = true;
 			console.log("[Connected]");
@@ -178,7 +178,10 @@ function sendImg() {
 	}
 
 	ws.onmessage = function(messageEvent) {
+		console.log(messageEvent);
+
 		const event_connection = messageEvent.data
+			console.log(event_connection);
 
 		if(event_connection.type == "connection") {
 			connection = true;
