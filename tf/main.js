@@ -109,7 +109,7 @@ function receivedLightPos() {
 		console.log(ws);
 
 	// Establishing connection
-	var connection = false;
+	let connection = false;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -127,12 +127,15 @@ function receivedLightPos() {
 
 		if(event_connection.type == "connection") {
 			connection = !connection;
+				console.log(connection);
 			console.log("[Connected]");
 		}
 		else {
 			console.log("[Connection not allowed]");
 		}
 	}
+
+	console.log(connection);
 
 	if(connection) {
 		ws.onmessage = function(messageEvent) {
@@ -164,7 +167,7 @@ function sendImg() {
 		console.log(ws);
 
 	// Establishing connection
-	var connection = false;
+	let connection = false;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -182,6 +185,8 @@ function sendImg() {
 
 		if(event_connection.type == "connection") {
 			connection = !connection;
+				console.log(connection);
+
 			console.log("[Connected]");
 		}
 		else {
@@ -189,8 +194,10 @@ function sendImg() {
 		}
 	}
 
+	console.log(connection);
+
 	// Sending image URL
-	var send = false;
+	let send = false;
 	if(connection) {
 		try {
 			const event_send = {
@@ -203,11 +210,14 @@ function sendImg() {
 				console.log("[Disconnected]");
 			
 			send = !send;
+				console.log(send);
 		} catch(error) {
 			console.log("[Error: message not sent to the Server]");
 			console.log("[Disconnected]");
 		}
 	}
+
+	console.log(send);
 
 	// Receiving light position
 	if(send) {
