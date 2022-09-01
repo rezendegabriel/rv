@@ -155,7 +155,7 @@ function receivedLightPos() {
 	}
 }
 
-function sendImg(ws) {
+function sendImg() {
 	// Sending image URL
 	try {
 		const event_send = {
@@ -203,7 +203,7 @@ function connect() {
 
 			text1Folder.remove(button2);
 
-			var paramsButton3 = {onClick: sendImg(ws)};
+			var paramsButton3 = {onClick: sendImg};
 			button3 = text1Folder.add(paramsButton3, "onClick").name("Send");
 		}
 		else {
@@ -247,7 +247,7 @@ var button4 = null;
 
 var button1Event = false;
 
-var paramsButton1 = {onClick: captureFrame}
+var paramsButton1 = {onClick: captureFrame};
 
 //-- GUI interface -------------------------------------------------------------------------------
 
