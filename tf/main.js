@@ -121,42 +121,36 @@ function receivedLightPos() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	let event_connection = null;
 	ws.onmessage = function(messageEvent) {
-		event_connection = JSON.parse(messageEvent.data);
-	}
+		const event_connection = JSON.parse(messageEvent.data);
 
-	let connection = 0;
-	if(event_connection.type == "connection") {
-		connection = 1;
-		console.log("[Connected]");
-	}
-	else {
-		console.log("[Connection not allowed]");
-	}
+		if(event_connection.type == "connection") {
+			console.log("[Connected]");
 
-	if(connection == 1) {
-		let event_recv = null;
-		ws.onmessage = function(messageEvent) {
-			event_recv = JSON.parse(messageEvent.data);
-		}
+			ws.onmessage = function(messageEvent) {
+				const event_recv = JSON.parse(messageEvent.data);
 
-		if(event_recv.type == "send") {
-			lightPos = event_recv.message;
-				console.log("[Message received by the Server] ", lightPos);
-				console.log("[Disconnected]");
-			
-			text1Folder.remove(button3);
+				if(event_recv.type == "send") {
+					lightPos = event_recv.message;
+						console.log("[Message received by the Server] ", lightPos);
+						console.log("[Disconnected]");
+					
+					text1Folder.remove(button3);
 
-			var paramsText2 = {showLightPos: lightPos};
-			text2 = text1Folder.add(paramsText2, "showLightPos").name("");
+					var paramsText2 = {showLightPos: lightPos};
+					text2 = text1Folder.add(paramsText2, "showLightPos").name("");
 
-			spotLight();
-			setupScene();
+					spotLight();
+					setupScene();
+				}
+				else {
+					console.log("[Unrecognized type]");
+					console.log("[Disconnected]");
+				}
+			}
 		}
 		else {
-			console.log("[Unrecognized type]");
-			console.log("[Disconnected]");
+			console.log("[Connection not allowed]");
 		}
 	}
 }
@@ -178,46 +172,35 @@ function sendImg() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	let event_connection = null;
 	ws.onmessage = function(messageEvent) {
-		event_connection = JSON.parse(messageEvent.data);
-	}
+		const event_connection = JSON.parse(messageEvent.data);
 
-	let connection = 0;
-	if(event_connection.type == "connection") {
-		connection = 1;
-		console.log("[Connected]");
-	}
-	else {
-		console.log("[Connection not allowed]");
-	}
+		if(event_connection.type == "connection") {
+			console.log("[Connected]");
 
-	// Sending image URL
-	let send = 0;
-	if(connection == 1) {
-		try {
-			const event_send = {
-				type: "send",
-				message: imgURL
-			};
+			// Sending image URL
+			try {
+				const event_send = {
+					type: "send",
+					message: imgURL
+				};
 
-			ws.onopen = () => ws.send(JSON.stringify(event_send));
-				console.log("[Message sent to the Server] ", imgURL);
+				ws.onopen = () => ws.send(JSON.stringify(event_send));
+					console.log("[Message sent to the Server] ", imgURL);
+					console.log("[Disconnected]");
+				
+				text1Folder.remove(button2);
+
+				var paramsButton3 = {onClick: receivedLightPos};
+				button3 = text1Folder.add(paramsButton3, "onClick").name("Receive light pos.");
+			} catch(error) {
+				console.log("[Error: message not sent to the Server]");
 				console.log("[Disconnected]");
-			
-			send = 1;
-		} catch(error) {
-			console.log("[Error: message not sent to the Server]");
-			console.log("[Disconnected]");
+			}
 		}
-	}
-
-	// Receiving light position
-	if(send == 1) {
-		text1Folder.remove(button2);
-
-		var paramsButton3 = {onClick: receivedLightPos};
-		button3 = text1Folder.add(paramsButton3, "onClick").name("Receive light pos.");
+		else {
+			console.log("[Connection not allowed]");
+		}
 	}
 }
 
