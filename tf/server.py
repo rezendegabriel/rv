@@ -125,12 +125,4 @@ async def main():
         await stop
         
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except NameError:
-        CONNECTIONS = 0
-
-        IMG_URL = ""
-        LIGHT_POS = ""
-
-        print("[Error: Server fail]")
+    asyncio.run(main())

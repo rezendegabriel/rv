@@ -109,7 +109,6 @@ function receivedLightPos() {
 		console.log(ws);
 
 	// Establishing connection
-	let connection = 0;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -122,39 +121,42 @@ function receivedLightPos() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
+	let event_connection = null;
 	ws.onmessage = function(messageEvent) {
-		const event_connection = JSON.parse(messageEvent.data);
+		event_connection = JSON.parse(messageEvent.data);
+	}
 
-		if(event_connection.type == "connection") {
-			connection = 1;
-			console.log("[Connected]");
-		}
-		else {
-			console.log("[Connection not allowed]");
-		}
+	let connection = 0;
+	if(event_connection.type == "connection") {
+		connection = 1;
+		console.log("[Connected]");
+	}
+	else {
+		console.log("[Connection not allowed]");
 	}
 
 	if(connection == 1) {
+		let event_recv = null;
 		ws.onmessage = function(messageEvent) {
-			const event_recv = JSON.parse(messageEvent.data);
+			event_recv = JSON.parse(messageEvent.data);
+		}
 
-			if(event_recv.type == "send") {
-				lightPos = event_recv.message;
-					console.log("[Message received by the Server] ", lightPos);
-					console.log("[Disconnected]");
-				
-				text1Folder.remove(button3);
-
-				var paramsText2 = {showLightPos: lightPos};
-				text2 = text1Folder.add(paramsText2, "showLightPos").name("");
-
-				spotLight();
-				setupScene();
-			}
-			else {
-				console.log("[Unrecognized type]");
+		if(event_recv.type == "send") {
+			lightPos = event_recv.message;
+				console.log("[Message received by the Server] ", lightPos);
 				console.log("[Disconnected]");
-			}
+			
+			text1Folder.remove(button3);
+
+			var paramsText2 = {showLightPos: lightPos};
+			text2 = text1Folder.add(paramsText2, "showLightPos").name("");
+
+			spotLight();
+			setupScene();
+		}
+		else {
+			console.log("[Unrecognized type]");
+			console.log("[Disconnected]");
 		}
 	}
 }
@@ -164,7 +166,6 @@ function sendImg() {
 		console.log(ws);
 
 	// Establishing connection
-	let connection = 0;
 	try {
 		const event_connection = {
 			type: "connection",
@@ -177,16 +178,18 @@ function sendImg() {
 		console.log("[Error: connection to the Server fail]");
 	}
 
+	let event_connection = null;
 	ws.onmessage = function(messageEvent) {
-		const event_connection = JSON.parse(messageEvent.data);
+		event_connection = JSON.parse(messageEvent.data);
+	}
 
-		if(event_connection.type == "connection") {
-			connection = 1;
-			console.log("[Connected]");
-		}
-		else {
-			console.log("[Connection not allowed]");
-		}
+	let connection = 0;
+	if(event_connection.type == "connection") {
+		connection = 1;
+		console.log("[Connected]");
+	}
+	else {
+		console.log("[Connection not allowed]");
 	}
 
 	// Sending image URL
@@ -203,7 +206,6 @@ function sendImg() {
 				console.log("[Disconnected]");
 			
 			send = 1;
-				console.log(send);
 		} catch(error) {
 			console.log("[Error: message not sent to the Server]");
 			console.log("[Disconnected]");
