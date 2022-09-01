@@ -126,7 +126,7 @@ function receivedLightPos() {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
-			connection = true;
+			connection = !connection;
 			console.log("[Connected]");
 		}
 		else {
@@ -134,9 +134,7 @@ function receivedLightPos() {
 		}
 	}
 
-	console.log(connection);
-	
-	if(connection === true) {
+	if(connection) {
 		ws.onmessage = function(messageEvent) {
 			const event_recv = JSON.parse(messageEvent.data);
 
@@ -183,7 +181,7 @@ function sendImg() {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
-			connection = true;
+			connection = !connection;
 			console.log("[Connected]");
 		}
 		else {
@@ -191,11 +189,9 @@ function sendImg() {
 		}
 	}
 
-	console.log(connection);
-
 	// Sending image URL
 	var send = false;
-	if(connection === true) {
+	if(connection) {
 		try {
 			const event_send = {
 				type: "send",
@@ -206,17 +202,15 @@ function sendImg() {
 				console.log("[Message sent to the Server] ", imgURL);
 				console.log("[Disconnected]");
 			
-			send = true;
+			send = !send;
 		} catch(error) {
 			console.log("[Error: message not sent to the Server]");
 			console.log("[Disconnected]");
 		}
 	}
 
-	console.log(send);
-
 	// Receiving light position
-	if(send === true) {
+	if(send) {
 		text1Folder.remove(button2);
 
 		var paramsButton3 = {onClick: receivedLightPos};
