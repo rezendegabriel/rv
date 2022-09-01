@@ -28,6 +28,7 @@ async def webserver(ws):
                 await ws.send(json.dumps(event_connection))
                 print("[Interface connected]")
 
+                print("[Awaiting message...]")
                 data = await ws.recv() # Received image URL by the Interface
                 event_recv = json.loads(data)
 
@@ -63,6 +64,7 @@ async def webserver(ws):
                 await ws.send(json.dumps(event_send)) # Sent image URL to the Render
                 print("[Image URL sent to the Render]")
 
+                print("[Awaiting message...]")
                 data = await ws.recv() # Received light position by the Render
                 event_recv = json.loads(data)
 
