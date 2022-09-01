@@ -133,8 +133,10 @@ function receivedLightPos() {
 			console.log("[Connection not allowed]");
 		}
 	}
+
+	console.log(connection);
 	
-	if(connection == true) {
+	if(connection === true) {
 		ws.onmessage = function(messageEvent) {
 			const event_recv = JSON.parse(messageEvent.data);
 
@@ -189,9 +191,11 @@ function sendImg() {
 		}
 	}
 
+	console.log(connection);
+
 	// Sending image URL
-	if(connection == true) {
-		var send = false;
+	var send = false;
+	if(connection === true) {
 		try {
 			const event_send = {
 				type: "send",
@@ -209,8 +213,10 @@ function sendImg() {
 		}
 	}
 
+	console.log(send);
+
 	// Receiving light position
-	if(send == true) {
+	if(send === true) {
 		text1Folder.remove(button2);
 
 		var paramsButton3 = {onClick: receivedLightPos};
