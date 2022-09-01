@@ -105,8 +105,8 @@ function getWebSocketServer() {
   }
 
 function receivedLightPos() {
-	const ws = new WebSocket(getWebSocketServer());
-		console.log(ws);
+	const ws2 = new WebSocket(getWebSocketServer());
+		console.log(ws2);
 
 	// Establishing connection
 	try {
@@ -115,19 +115,19 @@ function receivedLightPos() {
 			sender: "interface"
 		};
 
-		ws.onopen = () => ws.send(JSON.stringify(event_connection));
+		ws2.onopen = () => ws2.send(JSON.stringify(event_connection));
 			console.log("[Connecting to the Server...]");
 	} catch(error) {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	ws.onmessage = function(messageEvent) {
+	ws2.onmessage = function(messageEvent) {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
 			console.log("[Connected]");
 
-			ws.onmessage = function(messageEvent) {
+			ws2.onmessage = function(messageEvent) {
 				const event_recv = JSON.parse(messageEvent.data);
 
 				if(event_recv.type == "send") {
@@ -163,7 +163,7 @@ function sendImg() {
 			message: imgURL
 		};
 
-		ws.onopen = () => ws.send(JSON.stringify(event_send));
+		ws1.onopen = () => ws1.send(JSON.stringify(event_send));
 			console.log("[Message sent to the Server] ", imgURL);
 			console.log("[Disconnected]");
 		
@@ -179,8 +179,8 @@ function sendImg() {
 }
 
 function connect() {
-	const ws = new WebSocket(getWebSocketServer());
-		console.log(ws);
+	ws1 = new WebSocket(getWebSocketServer());
+		console.log(ws1);
 
 	// Establishing connection
 	try {
@@ -189,13 +189,13 @@ function connect() {
 			sender: "interface"
 		};
 
-		ws.onopen = () => ws.send(JSON.stringify(event_connection));
+		ws1.onopen = () => ws1.send(JSON.stringify(event_connection));
 			console.log("[Connecting to the Server...]");
 	} catch(error) {
 		console.log("[Error: connection to the Server fail]");
 	}
 
-	ws.onmessage = function(messageEvent) {
+	ws1.onmessage = function(messageEvent) {
 		const event_connection = JSON.parse(messageEvent.data);
 
 		if(event_connection.type == "connection") {
@@ -247,11 +247,12 @@ var button4 = null;
 
 var button1Event = false;
 
-var paramsButton1 = {onClick: captureFrame};
+var ws1 = null;
 
 //-- GUI interface -------------------------------------------------------------------------------
 
 var gui = new GUI();
+var paramsButton1 = {onClick: captureFrame};
 button1 = gui.add(paramsButton1, "onClick").name("Capture frame");
 
 //------------------------------------------------------------------------------------------------
